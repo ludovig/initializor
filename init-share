@@ -31,6 +31,7 @@ if [[ -f $conf ]]; then
     conf=$(pwd)"/"${conf:t}
     popd
 else
+    print -- Failed to load config file $conf
     return 1
 fi
 

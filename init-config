@@ -31,7 +31,7 @@ translate_config () {
     transform=$2
     config=$3
     #check config
-    [[ -z $config ]] && return 1
+    [[ -z $config ]] && print -- Failed to load config file && return 1
 
     local IFS=""
     for line in \
