@@ -68,19 +68,19 @@ medias=photos,games
 #─────────────────────────────────────────────────────────────────
 # config specific to environment
 #─────────────────────────────────────────────────────────────────
-[user]
+[envuser]
 root_name=maison
 root_location=/home/ludo
 
-[system]
+[envsystem]
 root_name=taverne
 root_location=/home/taverne
 
-[userpro]
+[envuserpro]
 root_name=bureaux
 root_location=/home/entreprise
 
-[systempro]
+[envsystempro]
 root_name=armoire
 root_location=/home/armoire
 

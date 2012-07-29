@@ -19,9 +19,11 @@ source $script_location/translate-config
 
 # options
 quiet=false
+pretend=false
 while getopts q opt; do
     case $opt in
     	q) quiet=true ;;
+    	p) pretend=true ;;
     esac
 done
 
@@ -48,9 +50,25 @@ fi
 
 # traverse tree
 source $script_location/traverse-tree $env $config
+
+#─────────────────────────────────────────────────────────────────
+# Create directories and show all directories
+#─────────────────────────────────────────────────────────────────
+make_directories() {
+   for dirpath in ${(ov)treepaths}; do
+       # create folder
+       if [[ false == $pretend ]] && [[ ! -d $dirpath ]]; then
+           $quiet || print -- "Creating directory $dirpath"
+           mkdir -p $dirpath
+   else
+       $quiet || print -- $dirpath
+       fi
+   done
+}
+
 #─────────────────────────────────────────────────────────────────
 # Main
 #─────────────────────────────────────────────────────────────────
-echo $treepaths
+make_directories
 
 # vim: set filetype=zsh:
