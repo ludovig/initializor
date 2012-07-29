@@ -42,6 +42,7 @@ parse_config_tree () {
 	translate_config ${envsection}$env $trenv $conf
 	rootpath=$root_location
 	rootname=$root_name
+	perms=$permissions
 	translate_config $namesection $trname $conf
 	translate_config $nodesection $trnode $conf
 	translate_config ${masksection}$env $trmask $conf

@@ -60,6 +60,10 @@ make_directories() {
        if [[ false == $pretend ]] && [[ ! -d $dirpath ]]; then
            $quiet || print -- "Creating directory $dirpath"
            mkdir -p $dirpath
+					 if [[ -n $perms ]]; then
+           	 $quiet || print -- "Setting permissions on $dirpath to $perms"
+						 chmod $perms $dirpath
+					 fi
    else
        $quiet || print -- $dirpath
        fi

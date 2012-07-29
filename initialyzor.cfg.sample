@@ -75,6 +75,7 @@ root_location=/home/ludo
 [envsystem]
 root_name=taverne
 root_location=/home/taverne
+permissions=2755
 
 [envuserpro]
 root_name=bureaux
@@ -83,6 +84,7 @@ root_location=/home/entreprise
 [envsystempro]
 root_name=armoire
 root_location=/home/armoire
+permissions=2755
 
 #─────────────────────────────────────────────────────────────────
 # Share directory
