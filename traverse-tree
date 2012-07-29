@@ -1,0 +1,92 @@
+#─────────────────────────────────────────────────────────────────
+# Build a directory tree
+#
+# usage:  source init-tree environment config rootpath
+
+# created: 2011-05-30
+# author:  Ludovic Vigouroux <ludo@mundoludo.fr>
+#─────────────────────────────────────────────────────────────────
+
+#─────────────────────────────────────────────────────────────────
+# Arguments
+#─────────────────────────────────────────────────────────────────
+env=$1
+conf=$2
+rootpath=$3
+
+#─────────────────────────────────────────────────────────────────
+# Parameters
+#─────────────────────────────────────────────────────────────────
+typeset -Ax name           # directories names
+typeset -Ax treepaths      # directories paths with name as key
+typeset -Ax treepathslabel # directories paths with label as key
+
+namesection=names
+trname='{print "name["$1"]="$2}'
+
+nodesection=nodes
+trnode='{gsub(","," "); print $1"=("$2")"}'
+
+masksection=mask
+trmask='{gsub(",","|"); print $1"=(${"$1":#("$2")})"}'
+
+envsection=env
+trenv='{print $1"="$2}'
+
+#─────────────────────────────────────────────────────────────────
+# Retrieve directories hierarchy configuration
+#─────────────────────────────────────────────────────────────────
+parse_config_tree () {
+	translate_config $namesection $trname $conf
+	translate_config $nodesection $trnode $conf
+	translate_config ${masksection}$env $trmask $conf
+	translate_config $envsection $trenv $conf
+}
+
+#─────────────────────────────────────────────────────────────────
+# Initialize values for root of the tree
+# and launch tree traversal
+#─────────────────────────────────────────────────────────────────
+init_tree () {
+  rootname=${rootpath:t}
+  treepaths[$rootname]=$rootpath
+  treepathslabel[$rootlabel]=$rootpath
+
+  traverse_tree $rootlabel $rootpath
+}
+
+#─────────────────────────────────────────────────────────────────
+# Traverse directory tree
+#
+# ARGUMENT 1: label of the root
+# ARGUMENT 2: path of the root
+#─────────────────────────────────────────────────────────────────
+traverse_tree() {
+  typeset level=$1
+  typeset localpath=$2
+
+  # level is not a leaf and contain an array with childrens labels
+  if [[ -n ${(P)level} && "array" == ${$(typeset +m $level)[1]} ]] ; then
+    for label in ${(P)level}; do
+      # Record path of the tree
+      localname=${name[$label]:-$label}
+      completepath=${localpath}/$localname
+      treepaths[$localname]=$completepath
+      treepathslabel[$label]=$completepath
+
+      # Continue to traverse tree
+      traverse_tree $label $completepath
+    done
+   fi
+}
+
+#─────────────────────────────────────────────────────────────────
+# Main
+#─────────────────────────────────────────────────────────────────
+# retrieve tree config
+parse_config_tree
+
+# build directories tree
+init_tree
+
+# vim: set filetype=zsh:

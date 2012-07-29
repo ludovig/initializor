@@ -1,0 +1,56 @@
+#!/bin/zsh
+#─────────────────────────────────────────────────────────────────
+# Initialize a local directories hierarchy
+#
+# usage:   init-dirs environment [config file]
+#
+# author:  Ludovic Vigouroux <ludo@mundoludo.fr>
+# created: October 2011
+#─────────────────────────────────────────────────────────────────
+# retrieve this file location
+pushd "$(dirname ${0})"
+script_location=$(pwd)
+popd
+
+# load functions libraries
+autoload -U colors; colors
+source $script_location/check-system
+source $script_location/translate-config
+
+# options
+quiet=false
+while getopts q opt; do
+    case $opt in
+    	q) quiet=true ;;
+    esac
+done
+
+# retrieve environment
+env=$1
+if [[ -z $env ]]; then
+	print -- Environement is needed. && return 1
+fi
+
+# retrieve config location
+config=$2
+# or set it to default value
+[[ -z $config ]] && config=${script_location}"/initialyzor.cfg"
+
+# clean path of config file
+if [[ -f $config ]]; then
+    pushd ${config:h}
+    config=$(pwd)"/"${config:t}
+    popd
+else
+    print -- Failed to load config file $config
+    return 1
+fi
+
+# traverse tree
+source $script_location/traverse-tree $env $config
+#─────────────────────────────────────────────────────────────────
+# Main
+#─────────────────────────────────────────────────────────────────
+echo $treepaths
+
+# vim: set filetype=zsh:
