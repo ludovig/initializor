@@ -1,0 +1,87 @@
+#─────────────────────────────────────────────────────────────────
+# Directories names
+#─────────────────────────────────────────────────────────────────
+[names]
+bak=grenier
+bittorrent=torrents
+chess=794_echecs
+db=bases
+doc=bibliotheque
+emule=mule
+sys=garage
+etc=confs
+games=jeux
+img=galerie
+medias=salon
+musics=boudoir
+mydoc=bureau
+mysrc=atelier
+photos=album
+var=hall
+videos=cinema
+sex=chambre
+
+#─────────────────────────────────────────────────────────────────
+# Directories hierarchy
+#─────────────────────────────────────────────────────────────────
+[nodes]
+# first level
+root=bak,doc,sys,img,var,medias,mydoc,mysrc,sex
+light=etc,src
+
+# second level
+var=web,p2p,src,mail
+medias=musics,videos,games,photos
+doc=chess
+sys=etc
+
+# third level
+p2p=emule,bittorrent
+
+#─────────────────────────────────────────────────────────────────
+# Masked directories for specific environment
+#─────────────────────────────────────────────────────────────────
+[maskhome]
+root=doc
+var=src,db
+medias=musics,videos,games
+
+[maskshare]
+root=mydoc,mysrc,sex
+var=p2p,mail,web
+
+[maskhomepro]
+root=doc,img,medias,sex
+var=src,p2p
+
+[masksharepro]
+root=mydoc,mysrc,sex
+var=mail,web
+medias=photos,games
+
+#─────────────────────────────────────────────────────────────────
+# Various sources
+#─────────────────────────────────────────────────────────────────
+[src]
+solarized=git://github.com/altercation/solarized.git
+auto-fu.zsh=git://github.com/ludovig/auto-fu.zsh.git
+zsh-syntax-highlighting=git://github.com/zsh-users/zsh-syntax-highlighting.git
+
+[srccomplete]
+symfttpd=git://github.com/laurentb/symfttpd.git
+symfony1=git://github.com/symfony/symfony1.git
+
+#─────────────────────────────────────────────────────────────────
+# Config
+#─────────────────────────────────────────────────────────────────
+[config]
+repository="https://github.com/ludovig/initialyzor.git"
+
+#─────────────────────────────────────────────────────────────────
+# Share directory
+#─────────────────────────────────────────────────────────────────
+[share]
+default_linux_share_location="/home/taverne"
+default_darwin_share_location="/Users/Shared/taverne"
+local_group_name=locaux
+local_group_id=2000

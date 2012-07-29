@@ -1,0 +1,103 @@
+#!/bin/zsh
+#─────────────────────────────────────────────────────────────────
+# Initialize a new share
+#
+# author:  Ludovic Vigouroux <ludo@mundoludo.fr>
+# created: December 2011
+# usage:   init-share [config file]
+#─────────────────────────────────────────────────────────────────
+autoload -U colors; colors
+# retrieve this file location
+pushd "$(dirname ${0})"
+script_location=$(pwd)
+popd
+
+# options
+quiet=false
+while getopts q opt; do
+    case $opt in
+    	q) quiet=true ;;
+    esac
+done
+
+# retrieve config location
+conf=$1
+# or set it to default value
+[[ -z $conf ]] && conf=${script_location}"/initialyzor.cfg"
+
+# clean path of config file
+if [[ -f $conf ]]; then
+    pushd ${conf:h}
+    conf=$(pwd)"/"${conf:t}
+    popd
+else
+    return 1
+fi
+
+# load functions libraries
+source $script_location/check-system
+source $script_location/init-config $conf
+
+# Parse config file section
+confsection=share
+trconfig='{print $1"="$2}'
+# retrieve share configuration
+translate_config $confsection $trconfig $conf
+# clean share values
+share=$share_location
+groupname=$group_name
+groupid=$group_id
+
+#─────────────────────────────────────────────────────────────────
+# Create group if needed
+#─────────────────────────────────────────────────────────────────
+create_group () {
+    if $DARWIN; then
+    	if dscl . list /groups | grep -q $groupname ; then
+    		$quiet || print -- "share group: $fg[blue]${groupname}$fg[default]"
+    	else
+    		$quiet || print -- "Creating share group\
+    			$fg[blue]${groupname}$fg[default]"
+    		dscl . create /groups/$groupname gid $groupid
+    	fi
+    else # linux
+    	#todo add getenv
+    	groupadd --gid $groupid $groupname
+    fi
+}
+
+#─────────────────────────────────────────────────────────────────
+# Create share if needed
+#─────────────────────────────────────────────────────────────────
+create_share () {
+    # Create share if needed
+    if [[ -d $share ]]; then
+    	$quiet || print -- "share location: $fg[blue]${share}$fg[default]."
+    else
+    	$quiet || print -- "Creating new directory $fg[blue]$share$fg[default]."
+    	mkdir -p $share || exit 1
+    fi
+}
+
+#─────────────────────────────────────────────────────────────────
+# Set permissions on local share
+#─────────────────────────────────────────────────────────────────
+set_permissions () {
+    chgrp $groupname $share
+    chmod -R 2775 $share
+    $quiet || print -- "permission on share:${fg[blue]}"\
+    	$(stat -c "%n are %A owner=%U(%u) group=%G(%g)" $share)\
+    	$fg_no_bold[default]
+}
+
+#─────────────────────────────────────────────────────────────────
+# Main
+#─────────────────────────────────────────────────────────────────
+# Create shared directory with group and permissions accordingly to
+# a config file
+$quiet ||    print $fg[green]"Shared directory"$fg[default]
+create_group
+create_share
+set_permissions
+
+## vim: set filetype=zsh:
