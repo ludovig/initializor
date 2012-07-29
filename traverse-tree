@@ -1,18 +1,20 @@
 #─────────────────────────────────────────────────────────────────
 # Build a directory tree
 #
-# usage:  source init-tree environment config rootpath
+# usage:  source traverse-tree environment config
 
 # created: 2011-05-30
 # author:  Ludovic Vigouroux <ludo@mundoludo.fr>
 #─────────────────────────────────────────────────────────────────
+source $script_location/translate-config
 
 #─────────────────────────────────────────────────────────────────
 # Arguments
 #─────────────────────────────────────────────────────────────────
 env=$1
 conf=$2
-rootpath=$3
+rootlabel=$3
+[[ -z $rootlabel ]] && rootlabel=root
 
 #─────────────────────────────────────────────────────────────────
 # Parameters
@@ -37,10 +39,12 @@ trenv='{print $1"="$2}'
 # Retrieve directories hierarchy configuration
 #─────────────────────────────────────────────────────────────────
 parse_config_tree () {
+	translate_config ${envsection}$env $trenv $conf
+	rootpath=$root_location
+	rootname=$root_name
 	translate_config $namesection $trname $conf
 	translate_config $nodesection $trnode $conf
 	translate_config ${masksection}$env $trmask $conf
-	translate_config $envsection $trenv $conf
 }
 
 #─────────────────────────────────────────────────────────────────
@@ -48,7 +52,7 @@ parse_config_tree () {
 # and launch tree traversal
 #─────────────────────────────────────────────────────────────────
 init_tree () {
-  rootname=${rootpath:t}
+	[[ -z $rootname ]] && rootname=${rootpath:t}
   treepaths[$rootname]=$rootpath
   treepathslabel[$rootlabel]=$rootpath
 

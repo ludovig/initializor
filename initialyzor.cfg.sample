@@ -5,6 +5,86 @@
 repository="https://github.com/ludovig/initialyzor.git"
 
 #─────────────────────────────────────────────────────────────────
+# Directories names
+#─────────────────────────────────────────────────────────────────
+[names]
+bak=grenier
+bittorrent=torrents
+chess=794_echecs
+db=bases
+doc=bibliotheque
+emule=mule
+sys=garage
+etc=confs
+games=jeux
+img=galerie
+medias=salon
+musics=boudoir
+mydoc=bureau
+mysrc=atelier
+photos=album
+var=hall
+videos=cinema
+sex=chambre
+
+#─────────────────────────────────────────────────────────────────
+# Directories hierarchy
+#─────────────────────────────────────────────────────────────────
+[nodes]
+# first level
+root=bak,doc,sys,img,var,medias,mydoc,mysrc,sex
+light=etc,src
+
+# second level
+var=web,p2p,src,mail
+medias=musics,videos,games,photos
+doc=chess
+sys=etc
+
+# third level
+p2p=emule,bittorrent
+
+#─────────────────────────────────────────────────────────────────
+# Masked directories for specific environment
+#─────────────────────────────────────────────────────────────────
+[maskuser]
+root=doc
+var=src,db
+medias=musics,videos,games
+
+[masksystem]
+root=mydoc,mysrc,sex
+var=p2p,mail,web
+
+[maskuserpro]
+root=doc,img,medias,sex
+var=src,p2p
+
+[masksystempro]
+root=mydoc,mysrc,sex
+var=mail,web
+medias=photos,games
+
+#─────────────────────────────────────────────────────────────────
+# config specific to environment
+#─────────────────────────────────────────────────────────────────
+[user]
+root_name=maison
+root_location=/home/ludo
+
+[system]
+root_name=taverne
+root_location=/home/taverne
+
+[userpro]
+root_name=bureaux
+root_location=/home/entreprise
+
+[systempro]
+root_name=armoire
+root_location=/home/armoire
+
+#─────────────────────────────────────────────────────────────────
 # Share directory
 #─────────────────────────────────────────────────────────────────
 [share]

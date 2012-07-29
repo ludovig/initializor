@@ -1,24 +1,11 @@
 #─────────────────────────────────────────────────────────────────
-# Initialize global configuration
+# Translate stuff in a config section in zsh parameters
 #
 # usage:   source init-config configuration_file
 #
 # author:  Ludovic Vigouroux <ludo@mundoludo.fr>
 # created: 2012-02-26
 #─────────────────────────────────────────────────────────────────
-# argument
-config=$1
-
-# config file section
-confsection=config
-trconfig='{print $1"="$2}'
-
-#─────────────────────────────────────────────────────────────────
-# Parse configuration file
-#─────────────────────────────────────────────────────────────────
-parse_config () {
-    translate_config $confsection $trconfig $config
-}
 
 #─────────────────────────────────────────────────────────────────
 # Translate config in zsh variables
@@ -37,14 +24,9 @@ translate_config () {
     for line in \
     	$(awk -F = "/\[/ {p=0}; /^[a-zA-Z]/ && p $transform; /\[ ?$section ?\]/ {p=1}; "\
     	$config)
-do
-    eval $line
-done
+    do
+        eval $line
+    done
 }
 
-#─────────────────────────────────────────────────────────────────
-# Main
-#─────────────────────────────────────────────────────────────────
-
-# Retrieve global values from configuration file
-parse_config
+# vim: set filetype=zsh:

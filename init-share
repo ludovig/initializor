@@ -2,15 +2,21 @@
 #─────────────────────────────────────────────────────────────────
 # Initialize a new share
 #
+# usage:   init-share [config file]
+#
 # author:  Ludovic Vigouroux <ludo@mundoludo.fr>
 # created: December 2011
-# usage:   init-share [config file]
 #─────────────────────────────────────────────────────────────────
-autoload -U colors; colors
 # retrieve this file location
 pushd "$(dirname ${0})"
 script_location=$(pwd)
 popd
+
+# load functions libraries
+autoload -U colors; colors
+source $script_location/check-system
+source $script_location/translate-config
+
 
 # options
 quiet=false
@@ -21,29 +27,25 @@ while getopts q opt; do
 done
 
 # retrieve config location
-conf=$1
+config=$1
 # or set it to default value
-[[ -z $conf ]] && conf=${script_location}"/initialyzor.cfg"
+[[ -z $config ]] && config=${script_location}"/initialyzor.cfg"
 
 # clean path of config file
-if [[ -f $conf ]]; then
-    pushd ${conf:h}
-    conf=$(pwd)"/"${conf:t}
+if [[ -f $config ]]; then
+    pushd ${config:h}
+    config=$(pwd)"/"${config:t}
     popd
 else
-    print -- Failed to load config file $conf
+    print -- Failed to load config file $config
     return 1
 fi
-
-# load functions libraries
-source $script_location/check-system
-source $script_location/init-config $conf
 
 # Parse config file section
 confsection=share
 trconfig='{print $1"="$2}'
 # retrieve share configuration
-translate_config $confsection $trconfig $conf
+translate_config $confsection $trconfig $config
 # clean share values
 share=$share_location
 groupname=$group_name
@@ -85,7 +87,7 @@ create_share () {
 #─────────────────────────────────────────────────────────────────
 set_permissions () {
     chgrp $groupname $share
-    chmod -R 2775 $share
+    chmod 2775 $share
     $quiet || print -- "permission on share:${fg[blue]}"\
     	$(stat -c "%n are %A owner=%U(%u) group=%G(%g)" $share)\
     	$fg_no_bold[default]
