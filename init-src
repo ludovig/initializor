@@ -1,13 +1,10 @@
 #!/bin/zsh
 #─────────────────────────────────────────────────────────────────
-# Initialize a local directories hierarchy
+# Retrieve sources
 #
-# usage:   init-dirs environment [config file]
-#
-# author:  Ludovic Vigouroux <ludo@mundoludo.fr>
-# created: October 2011
+# AUTHOR:  Ludovic Vigouroux <ludo@mundoludo.fr>
+# CREATED: December 2011
 #─────────────────────────────────────────────────────────────────
-
 # retrieve this file location
 pushd "$(dirname ${0})"
 script_location=$(pwd)
@@ -22,7 +19,6 @@ autoload -U colors; colors
 
 # options
 [[ -z $quiet ]] && quiet=false
-[[ -z $pretend ]] && pretend=false
 
 # retrieve environment
 env=$1
@@ -34,29 +30,31 @@ clean-config-path $conf
 
 # load directories path
 load-tree $env $config
+src=$treepathslabel[src]
 
 #─────────────────────────────────────────────────────────────────
-# Create directories and show all directories
+# Clone sources
 #─────────────────────────────────────────────────────────────────
-make_directories() {
-   for dirpath in ${(ov)treepaths}; do
-       # create folder
-       if [[ false == $pretend ]] && [[ ! -d $dirpath ]]; then
-           $quiet || print -- "Creating directory $dirpath"
-           mkdir -p $dirpath
-					 if [[ -n $perms ]]; then
-           	 $quiet || print -- "Setting permissions on $dirpath to $perms"
-						 chmod $perms $dirpath
-					 fi
-   else
-       $quiet || print -- $dirpath
-       fi
-   done
+retrieve_src() {
+
+	# Parse share config file section
+	typeset -A sources
+	confsection=src
+	trconfig='{print "sources["$1"]="$2}'
+	translate_config $confsection $trconfig $conf
+
+  for project in ${(ok)sources}; do
+    print -- $project
+    local dir=$src/$project
+    if [[ -d $dir ]]; then
+      cd $dir && git pull
+    else
+      git clone $sources[$project] $dir
+    fi
+  done
 }
 
-#─────────────────────────────────────────────────────────────────
-# Main
-#─────────────────────────────────────────────────────────────────
-make_directories
+$quiet || print $fg[green]"Retrieve sources"$fg[default]
+retrieve_src
 
 # vim: set filetype=zsh:

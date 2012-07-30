@@ -2,38 +2,10 @@
 # Build a directory tree
 #
 # usage:  source traverse-tree environment config
-
+#
 # created: 2011-05-30
 # author:  Ludovic Vigouroux <ludo@mundoludo.fr>
 #─────────────────────────────────────────────────────────────────
-source $script_location/translate-config
-
-#─────────────────────────────────────────────────────────────────
-# Arguments
-#─────────────────────────────────────────────────────────────────
-env=$1
-conf=$2
-rootlabel=$3
-[[ -z $rootlabel ]] && rootlabel=root
-
-#─────────────────────────────────────────────────────────────────
-# Parameters
-#─────────────────────────────────────────────────────────────────
-typeset -Ax name           # directories names
-typeset -Ax treepaths      # directories paths with name as key
-typeset -Ax treepathslabel # directories paths with label as key
-
-namesection=names
-trname='{print "name["$1"]="$2}'
-
-nodesection=nodes
-trnode='{gsub(","," "); print $1"=("$2")"}'
-
-masksection=mask
-trmask='{gsub(",","|"); print $1"=(${"$1":#("$2")})"}'
-
-envsection=env
-trenv='{print $1"="$2}'
 
 #─────────────────────────────────────────────────────────────────
 # Retrieve directories hierarchy configuration
@@ -86,12 +58,37 @@ traverse_tree() {
 }
 
 #─────────────────────────────────────────────────────────────────
-# Main
+# Load directories hierarchy
 #─────────────────────────────────────────────────────────────────
-# retrieve tree config
-parse_config_tree
+load-tree() {
+	# arguments
+	env=$1
+	conf=$2
+	rootlabel=$3
+	[[ -z $rootlabel ]] && rootlabel=root
 
-# build directories tree
-init_tree
+	# parameters
+	typeset -Ag name           # directories names
+	typeset -Ag treepaths      # directories paths with name as key
+	typeset -Ag treepathslabel # directories paths with label as key
+
+	namesection=names
+	trname='{print "name["$1"]="$2}'
+
+	nodesection=nodes
+	trnode='{gsub(","," "); print $1"=("$2")"}'
+
+	masksection=mask
+	trmask='{gsub(",","|"); print $1"=(${"$1":#("$2")})"}'
+
+	envsection=env
+	trenv='{print $1"="$2}'
+
+	# retrieve tree config
+	parse_config_tree
+
+	# build directories tree
+	init_tree
+}
 
 # vim: set filetype=zsh:

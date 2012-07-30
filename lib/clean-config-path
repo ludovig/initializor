@@ -1,0 +1,28 @@
+#!/bin/zsh
+#─────────────────────────────────────────────────────────────────
+# Load configuration files
+#
+# usage:   . load-config environment [configuration file]
+#
+# author:  Ludovic Vigouroux <ludo@mundoludo.fr>
+# created: 07/30/2012
+#─────────────────────────────────────────────────────────────────
+
+# retrieve config location 
+# or set it to default value
+clean-config-path() {
+	conf=$1
+	[[ -z $conf ]] && 
+		[[ -n $script_location ]] && 
+			conf=${script_location}"/initialyzor.cfg"
+
+	# clean path of config file
+	if [[ -f $conf ]]; then
+			pushd ${conf:h}
+			config=$(pwd)"/"${conf:t}
+			popd
+	else
+			print -- Failed to load config file $conf
+			return 1
+	fi
+}
