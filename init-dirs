@@ -2,8 +2,6 @@
 #─────────────────────────────────────────────────────────────────
 # Initialize a local directories hierarchy
 #
-# usage:   init-dirs environment [config file]
-#
 # author:  Ludovic Vigouroux <ludo@mundoludo.fr>
 # created: October 2011
 #─────────────────────────────────────────────────────────────────
@@ -13,43 +11,21 @@ pushd "$(dirname ${0})"
 script_location=$(pwd)
 popd
 
-# load functions
-autoload -U colors; colors
-. $script_location/lib/check-system && check-system
-. $script_location/lib/translate-config
-. $script_location/lib/clean-config-path
-. $script_location/lib/traverse-tree
-
-# options
-[[ -z $quiet ]] && quiet=false
-[[ -z $pretend ]] && pretend=false
-
-# retrieve environment
-env=$1
-[[ -z $env ]] && print -- Environement is needed. && return 1
-
-# load config
-conf=$2
-clean-config-path $conf
-
-# load directories path
-load-tree $env $config
-
 #─────────────────────────────────────────────────────────────────
 # Create directories and show all directories
 #─────────────────────────────────────────────────────────────────
 make_directories() {
    for dirpath in ${(ov)treepaths}; do
        # create folder
-       if [[ false == $pretend ]] && [[ ! -d $dirpath ]]; then
-           $quiet || print -- "Creating directory $dirpath"
-           mkdir -p $dirpath
-					 if [[ -n $perms ]]; then
-           	 $quiet || print -- "Setting permissions on $dirpath to $perms"
-						 chmod $perms $dirpath
-					 fi
-   else
-       $quiet || print -- $dirpath
+       if $write; then
+         if [[ ! -d $dirpath ]]; then
+           mkdir -pv $dirpath
+         fi
+         if [[ -n $perms ]]; then
+           chmod -v $perms $dirpath
+         fi
+       else
+         print -- $dirpath
        fi
    done
 }
@@ -57,6 +33,23 @@ make_directories() {
 #─────────────────────────────────────────────────────────────────
 # Main
 #─────────────────────────────────────────────────────────────────
+write=false
+local opt;
+while getopts w opt; do
+  case $opt in
+    (w)
+      write=true
+      ;;
+    (\?)
+      print Bad option, aborting.
+      return 1
+      ;;
+  esac
+done
+
+# load directories path
+. $script_location/traverse-tree -v $config >> /dev/null
+
 make_directories
 
 # vim: set filetype=zsh:

@@ -8,7 +8,7 @@
 
 local defaultname="initialyzor.cfg"
 usage () {
-  print "read-config section config_file"
+  print "usage: read-config section config_file"
   exit
 }
 
@@ -28,7 +28,7 @@ if [[ ! -e $config ]]; then
   fi
   last_section=$#
 else
-	last_section=$(($# - 1))
+  last_section=$(($# - 1))
 fi
 
 for section in $*[1,$last_section]; do

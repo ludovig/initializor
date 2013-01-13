@@ -7,7 +7,7 @@
 #─────────────────────────────────────────────────────────────────
 
 usage () {
-  print "traverse-tree [-v] config_file"
+  print "usage: traverse-tree [-v] config_file"
   exit 1
 }
 
@@ -57,16 +57,16 @@ traverse_tree() {
   # level is not a leaf and contain an array with childrens labels
   if [[ -n ${(P)level} && "array" == ${$(typeset +m $level)[1]} ]] ; then
     for label in ${(P)level}; do
-			# do not record ignored directories
-			if [[ -z ${(M)ignore:#${label}} ]]; then
-				# Record path of the tree
-				localname=${names[$label]:-$label}
-				completepath=${localpath}/$localname
-				treepaths[$localname]=$completepath
+      # do not record ignored directories
+      if [[ -z ${(M)ignore:#${label}} ]]; then
+        # Record path of the tree
+        localname=${names[$label]:-$label}
+        completepath=${localpath}/$localname
+        treepaths[$localname]=$completepath
 
         # Continue to traverse tree
         traverse_tree $label $completepath
-			fi
+      fi
     done
    fi
 }
@@ -83,10 +83,10 @@ popd
 readconfig=($script_location/read-config names nodes local)
 
 # check config
-config=${*:#-v}
+config=${*:#-*}
 if ! $readconfig $config > /dev/null; then
-	$readconfig  $config
-	usage
+  $readconfig  $config
+  usage
 fi
 
 # retrieve tree config
@@ -95,16 +95,7 @@ parse_tree_config
 # build directories tree
 init_tree
 
-# show tree if verbose is set
-local opt
-while getopts v opt; do
-  case $opt in
-    (v)
-      for dirpath in ${(ov)treepaths}; do
-        print $dirpath
-      done
-      ;;
-  esac
+for dirpath in ${(ov)treepaths}; do
+  print $dirpath
 done
-
 # vim: set filetype=zsh:
