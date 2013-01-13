@@ -6,35 +6,48 @@
 # created: 2013-01-13
 #─────────────────────────────────────────────────────────────────
 
+local defaultname="initialyzor.cfg"
 usage () {
-	print "read-config section config_file"
-	exit
+  print "read-config section config_file"
+  exit
 }
 
 # some checks
-[[ $# -lt 2 ]] && usage
+[[ $# -eq 0 ]] && usage
 config=$*[$#]
-[[ ! -e $config ]] &&\
-	print -- "config file \"$config\" not found" &&\
-	exit 1
+if [[ ! -e $config ]]; then
+  if [[ -e $defaultname ]]; then
+    config=$defaultname
+  else
+    if [[ -e ./$defaultname ]]; then
+      config=./$defaultname
+    else
+      print -- "no config file found" &&\
+      exit 1
+    fi
+  fi
+  last_section=$#
+else
+	last_section=$(($# - 1))
+fi
 
-for section in $*[1,(($# - 1))]; do
+for section in $*[1,$last_section]; do
 
-	# check section
+  # check section
   ! grep -qE '^\[ ?'$section $config &&\
-  	print -- "section \"$section\" not found" &&\
-  	exit 1
+    print -- "section \"$section\" not found" &&\
+    exit 1
 
   # retrieve array type of section
   simple=$(awk '/^\[/ {p=0}; /^[a-zA-Z]*=.*,/ && p {print "true"; p=0} /^\[ ?'$section'/ {p=1};' $config)
   # translate config
   # simple array
   if [[ -n $simple ]]; then
-  	awk -F = '/^\[/ {p=0};/^[a-zA-Z]/ && p {gsub(","," "); print $1"=("$2")"}; /^\[ ?'$section'/ {p=1};' $config
+    awk -F = '/^\[/ {p=0};/^[a-zA-Z]/ && p {gsub(","," "); print $1"=("$2")"}; /^\[ ?'$section'/ {p=1};' $config
   # associative array
   else
-  	echo "typeset -Ag "$section
-  	awk -F = '/^\[/ {p=0}; /^[a-zA-Z]/ && p {print "'$section'["$1"]="$2}; /^\[ ?'$section'/ {p=1};' $config
+    echo "typeset -Ag "$section
+    awk -F = '/^\[/ {p=0}; /^[a-zA-Z]/ && p {print "'$section'["$1"]="$2}; /^\[ ?'$section'/ {p=1};' $config
   fi
 
 done

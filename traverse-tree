@@ -2,15 +2,13 @@
 #─────────────────────────────────────────────────────────────────
 # Build a directory tree
 #
-# usage:  source traverse-tree environment config
-#
 # created: 2011-05-30
 # author:  Ludovic Vigouroux <ludo@mundoludo.fr>
 #─────────────────────────────────────────────────────────────────
 
 usage () {
   print "traverse-tree [-v] config_file"
-  exit
+  exit 1
 }
 
 #─────────────────────────────────────────────────────────────────
@@ -20,7 +18,7 @@ parse_tree_config () {
   # set variables from config file
   local IFS=""
   for line in \
-    $($script_location/read-config names nodes local $config)
+    $($readconfig $config)
   do
     eval $line
   done
@@ -76,16 +74,20 @@ traverse_tree() {
 #─────────────────────────────────────────────────────────────────
 # Load directories hierarchy
 #─────────────────────────────────────────────────────────────────
-[[ ${#${*:#-v}[*]} -ne 1 ]] && usage
-config=$*[$#]
-[[ ! -e $config ]] &&\
-  print -- "config file \"$config\" not found" &&\
-  exit 1
-
 # retrieve this file location
 pushd "$(dirname ${0})"
 script_location=$(pwd)
 popd
+
+# read config command
+readconfig=($script_location/read-config names nodes local)
+
+# check config
+config=${*:#-v}
+if ! $readconfig $config > /dev/null; then
+	$readconfig  $config
+	usage
+fi
 
 # retrieve tree config
 parse_tree_config
