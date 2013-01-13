@@ -1,0 +1,37 @@
+#!/bin/zsh
+#─────────────────────────────────────────────────────────────────
+# Translate values in a config section in zsh parameters
+#
+# author:  Ludovic Vigouroux <ludo@mundoludo.fr>
+# created: 2012-02-26
+#─────────────────────────────────────────────────────────────────
+
+usage () {
+	print "read-config section config_file"
+	exit
+}
+
+# some checks
+[[ 2 != $# ]] && usage
+section=$1
+config=$2
+[[ ! -e $config ]] &&\
+	print -- "config file \"$2\" not found" &&\
+	exit 1
+! grep -qE '^\[ ?'$section $config &&\
+	print -- "section \"$1\" not found" &&\
+	exit 1
+
+# retrieve array type of section
+simple=$(awk '/^\[/ {p=0}; /^[a-zA-Z]*=.*,/ && p {print "true"; p=0} /^\[ ?'$section'/ {p=1};' $config)
+# translate config
+# simple array
+if [[ -n $simple ]]; then
+	awk -F = '/^\[/ {p=0};/^[a-zA-Z]/ && p {gsub(","," "); print $1"=("$2")"}; /^\[ ?'$section'/ {p=1};' $config
+# associative array
+else
+	echo "typeset -A "$section
+	awk -F = '/^\[/ {p=0}; /^[a-zA-Z]/ && p {print "'$section'["$1"]="$2}; /^\[ ?'$section'/ {p=1};' $config
+fi
+
+# vim: set filetype=zsh:
