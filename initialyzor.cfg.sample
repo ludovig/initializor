@@ -1,12 +1,7 @@
 #─────────────────────────────────────────────────────────────────
-# Config
-#─────────────────────────────────────────────────────────────────
-[config]
-repository="https://github.com/ludovig/initialyzor.git"
-
+# Directories hierarchy
 #─────────────────────────────────────────────────────────────────
 # Directories names
-#─────────────────────────────────────────────────────────────────
 [names]
 bak=grenier
 bittorrent=torrents
@@ -15,28 +10,26 @@ db=bases
 doc=bibliotheque
 emule=mule
 sys=garage
-etc=confs
+etc=confz
 games=jeux
 img=galerie
 medias=salon
-musics=boudoir
+musics=musique
 mydoc=bureau
 mysrc=atelier
 photos=album
-var=hall
+net=hall
 videos=cinema
-sex=chambre
+sex=boudoir
 
-#─────────────────────────────────────────────────────────────────
-# Directories hierarchy
-#─────────────────────────────────────────────────────────────────
+# Tree
 [nodes]
 # first level
-root=bak,doc,sys,img,var,medias,mydoc,mysrc,sex
+root=bak,doc,sys,img,net,medias,mydoc,mysrc,sex
 light=etc,src
 
 # second level
-var=web,p2p,src,mail
+net=web,p2p,src,mail
 medias=musics,videos,games,photos
 doc=chess
 sys=etc
@@ -44,55 +37,11 @@ sys=etc
 # third level
 p2p=emule,bittorrent
 
-#─────────────────────────────────────────────────────────────────
-# Masked directories for specific environment
-#─────────────────────────────────────────────────────────────────
-[maskuser]
-root=doc
-var=src,db
-medias=musics,videos,games
-
-[masksystem]
-root=mydoc,mysrc,sex
-var=p2p,mail,web
-
-[maskuserpro]
-root=doc,img,medias,sex
-var=src,p2p
-
-[masksystempro]
-root=mydoc,mysrc,sex
-var=p2p,mail,web
-medias=photos,games
-
-#─────────────────────────────────────────────────────────────────
-# config specific to environment
-#─────────────────────────────────────────────────────────────────
-[envuser]
+# Local specific
+[local]
+ignore=doc,src,db,musics,videos,games
 root_name=maison
 root_location=/home/ludo
-
-[envsystem]
-root_name=taverne
-root_location=/home/taverne
-permissions=2775
-
-[envuserpro]
-root_name=bureaux
-root_location=/home/entreprise
-
-[envsystempro]
-root_name=armoire
-root_location=/home/armoire
-permissions=2775
-
-#─────────────────────────────────────────────────────────────────
-# Share directory
-#─────────────────────────────────────────────────────────────────
-[share]
-share_location="/home/taverne"
-group_name=locaux
-group_id=2000
 
 #─────────────────────────────────────────────────────────────────
 # Various sources
@@ -103,4 +52,3 @@ auto-fu.zsh=git://github.com/ludovig/auto-fu.zsh.git
 zsh-syntax-highlighting=git://github.com/zsh-users/zsh-syntax-highlighting.git
 symfttpd=git://github.com/laurentb/symfttpd.git
 symfony1=git://github.com/symfony/symfony1.git
-

@@ -9,27 +9,27 @@
 #─────────────────────────────────────────────────────────────────
 
 usage () {
-	print "show-tree config_file"
-	exit
+  print "traverse-tree [-v] config_file"
+  exit
 }
 
 #─────────────────────────────────────────────────────────────────
 # Retrieve directories hierarchy configuration
 #─────────────────────────────────────────────────────────────────
 parse_tree_config () {
-	# set variables from config file
+  # set variables from config file
   local IFS=""
   for line in \
- 		$($script_location/read-config names nodes local $config)
+    $($script_location/read-config names nodes local $config)
   do
- 	 	eval $line
+    eval $line
   done
 
-	# aliases
-	rootname=$root_name
-	rootpath=$root_location
-	rootlabel=$root_label
-	# default values
+  # aliases
+  rootname=$root_name
+  rootpath=$root_location
+  rootlabel=$root_label
+  # default values
   [[ -z $rootname ]] && rootname=${rootpath:t}
   [[ -z $rootlabel ]] && rootlabel=root
 }
@@ -46,7 +46,6 @@ init_tree () {
   traverse_tree $rootlabel $rootpath
 }
 
-
 #─────────────────────────────────────────────────────────────────
 # Traverse directory tree
 #
@@ -60,13 +59,16 @@ traverse_tree() {
   # level is not a leaf and contain an array with childrens labels
   if [[ -n ${(P)level} && "array" == ${$(typeset +m $level)[1]} ]] ; then
     for label in ${(P)level}; do
-      # Record path of the tree
-      localname=${names[$label]:-$label}
-      completepath=${localpath}/$localname
-      treepaths[$localname]=$completepath
+			# do not record ignored directories
+			if [[ -z ${(M)ignore:#${label}} ]]; then
+				# Record path of the tree
+				localname=${names[$label]:-$label}
+				completepath=${localpath}/$localname
+				treepaths[$localname]=$completepath
 
-      # Continue to traverse tree
-      traverse_tree $label $completepath
+        # Continue to traverse tree
+        traverse_tree $label $completepath
+			fi
     done
    fi
 }
@@ -74,12 +76,11 @@ traverse_tree() {
 #─────────────────────────────────────────────────────────────────
 # Load directories hierarchy
 #─────────────────────────────────────────────────────────────────
-# some checks
-[[ $# -ne 1 ]] && usage
-config=$1
+[[ ${#${*:#-v}[*]} -ne 1 ]] && usage
+config=$*[$#]
 [[ ! -e $config ]] &&\
-	print -- "config file \"$config\" not found" &&\
-	exit 1
+  print -- "config file \"$config\" not found" &&\
+  exit 1
 
 # retrieve this file location
 pushd "$(dirname ${0})"
@@ -91,5 +92,17 @@ parse_tree_config
 
 # build directories tree
 init_tree
+
+# show tree if verbose is set
+local opt
+while getopts v opt; do
+  case $opt in
+    (v)
+      for dirpath in ${(ov)treepaths}; do
+        print $dirpath
+      done
+      ;;
+  esac
+done
 
 # vim: set filetype=zsh:
