@@ -1,3 +1,4 @@
+#!/bin/zsh
 #─────────────────────────────────────────────────────────────────
 # Build a directory tree
 #
@@ -7,30 +8,44 @@
 # author:  Ludovic Vigouroux <ludo@mundoludo.fr>
 #─────────────────────────────────────────────────────────────────
 
+usage () {
+	print "show-tree config_file"
+	exit
+}
+
 #─────────────────────────────────────────────────────────────────
 # Retrieve directories hierarchy configuration
 #─────────────────────────────────────────────────────────────────
-parse_config_tree () {
-	translate_config ${envsection}$env $trenv $conf
-	rootpath=$root_location
+parse_tree_config () {
+	# set variables from config file
+  local IFS=""
+  for line in \
+ 		$($script_location/read-config names nodes local $config)
+  do
+ 	 	eval $line
+  done
+
+	# aliases
 	rootname=$root_name
-	perms=$permissions
-	translate_config $namesection $trname $conf
-	translate_config $nodesection $trnode $conf
-	translate_config ${masksection}$env $trmask $conf
+	rootpath=$root_location
+	rootlabel=$root_label
+	# default values
+  [[ -z $rootname ]] && rootname=${rootpath:t}
+  [[ -z $rootlabel ]] && rootlabel=root
 }
 
 #─────────────────────────────────────────────────────────────────
-# Initialize values for root of the tree
-# and launch tree traversal
+# Launch three traversal
 #─────────────────────────────────────────────────────────────────
 init_tree () {
-	[[ -z $rootname ]] && rootname=${rootpath:t}
+  # parameters
+  typeset -Ag treepaths      # directories paths
   treepaths[$rootname]=$rootpath
-  treepathslabel[$rootlabel]=$rootpath
 
+  # go !
   traverse_tree $rootlabel $rootpath
 }
+
 
 #─────────────────────────────────────────────────────────────────
 # Traverse directory tree
@@ -46,10 +61,9 @@ traverse_tree() {
   if [[ -n ${(P)level} && "array" == ${$(typeset +m $level)[1]} ]] ; then
     for label in ${(P)level}; do
       # Record path of the tree
-      localname=${name[$label]:-$label}
+      localname=${names[$label]:-$label}
       completepath=${localpath}/$localname
       treepaths[$localname]=$completepath
-      treepathslabel[$label]=$completepath
 
       # Continue to traverse tree
       traverse_tree $label $completepath
@@ -60,35 +74,22 @@ traverse_tree() {
 #─────────────────────────────────────────────────────────────────
 # Load directories hierarchy
 #─────────────────────────────────────────────────────────────────
-load-tree() {
-	# arguments
-	env=$1
-	conf=$2
-	rootlabel=$3
-	[[ -z $rootlabel ]] && rootlabel=root
+# some checks
+[[ $# -ne 1 ]] && usage
+config=$1
+[[ ! -e $config ]] &&\
+	print -- "config file \"$config\" not found" &&\
+	exit 1
 
-	# parameters
-	typeset -Ag name           # directories names
-	typeset -Ag treepaths      # directories paths with name as key
-	typeset -Ag treepathslabel # directories paths with label as key
+# retrieve this file location
+pushd "$(dirname ${0})"
+script_location=$(pwd)
+popd
 
-	namesection=names
-	trname='{print "name["$1"]="$2}'
+# retrieve tree config
+parse_tree_config
 
-	nodesection=nodes
-	trnode='{gsub(","," "); print $1"=("$2")"}'
-
-	masksection=mask
-	trmask='{gsub(",","|"); print $1"=(${"$1":#("$2")})"}'
-
-	envsection=env
-	trenv='{print $1"="$2}'
-
-	# retrieve tree config
-	parse_config_tree
-
-	# build directories tree
-	init_tree
-}
+# build directories tree
+init_tree
 
 # vim: set filetype=zsh:

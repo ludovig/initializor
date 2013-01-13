@@ -15,10 +15,12 @@ usage () {
 [[ $# -lt 2 ]] && usage
 config=$*[$#]
 [[ ! -e $config ]] &&\
-	print -- "config file \"$2\" not found" &&\
+	print -- "config file \"$config\" not found" &&\
 	exit 1
+
 for section in $*[1,(($# - 1))]; do
 
+	# check section
   ! grep -qE '^\[ ?'$section $config &&\
   	print -- "section \"$section\" not found" &&\
   	exit 1
@@ -31,7 +33,7 @@ for section in $*[1,(($# - 1))]; do
   	awk -F = '/^\[/ {p=0};/^[a-zA-Z]/ && p {gsub(","," "); print $1"=("$2")"}; /^\[ ?'$section'/ {p=1};' $config
   # associative array
   else
-  	echo "typeset -A "$section
+  	echo "typeset -Ag "$section
   	awk -F = '/^\[/ {p=0}; /^[a-zA-Z]/ && p {print "'$section'["$1"]="$2}; /^\[ ?'$section'/ {p=1};' $config
   fi
 
