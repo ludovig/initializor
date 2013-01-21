@@ -1,0 +1,34 @@
+#!/bin/zsh
+#─────────────────────────────────────────────────────────────────
+# Translate values in a config section in zsh parameters
+# Safe version, the one to source in other files
+#
+# author:  Ludovic Vigouroux <ludo@mundoludo.fr>
+# created: 2013-01-20
+#─────────────────────────────────────────────────────────────────
+if [ -z $script_location ]; then
+  # retrieve this file location
+  pushd "$(dirname ${0})"
+  script_location=$(pwd)
+  popd
+fi
+
+args_withoutopts=(${*:#-*})
+
+readconfig_cmd=($script_location/read-config $args_withoutopts)
+if ! $readconfig_cmd > /dev/null; then
+  $readconfig_cmd
+	exit
+fi
+
+# set variables from config file
+defaultIFS=$IFS
+local IFS=""
+for line in \
+  $($readconfig_cmd)
+do
+  eval $line
+done
+local IFS=$defaultIFS
+
+# vim: set filetype=zsh:

@@ -6,11 +6,6 @@
 # created: October 2011
 #─────────────────────────────────────────────────────────────────
 
-# retrieve this file location
-pushd "$(dirname ${0})"
-script_location=$(pwd)
-popd
-
 #─────────────────────────────────────────────────────────────────
 # Create directories and show all directories
 #─────────────────────────────────────────────────────────────────
@@ -33,6 +28,11 @@ make_directories() {
 #─────────────────────────────────────────────────────────────────
 # Main
 #─────────────────────────────────────────────────────────────────
+# retrieve this file location
+pushd "$(dirname ${0})"
+script_location=$(pwd)
+popd
+
 write=false
 local opt;
 while getopts w opt; do
@@ -48,7 +48,7 @@ while getopts w opt; do
 done
 
 # load directories path
-. $script_location/traverse-tree -v $config >> /dev/null
+. $script_location/traverse-tree -q $*
 
 make_directories
 

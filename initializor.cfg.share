@@ -1,0 +1,53 @@
+#─────────────────────────────────────────────────────────────────
+# Directories hierarchy
+#─────────────────────────────────────────────────────────────────
+# Directories names
+[names]
+bak=grenier
+bittorrent=torrents
+chess=794_echecs
+db=bases
+doc=bibliotheque
+emule=mule
+sys=garage
+etc=confz
+games=jeux
+img=galerie
+medias=salon
+musics=musique
+mydoc=bureau
+mysrc=atelier
+photos=album
+net=hall
+videos=cinema
+sex=boudoir
+
+# Tree
+[nodes]
+# first level
+root=bak,doc,sys,img,net,medias,mydoc,mysrc,sex
+light=etc,src
+
+# second level
+net=web,p2p,src,mail
+medias=musics,videos,games,photos
+doc=chess
+sys=etc
+
+# third level
+p2p=emule,bittorrent
+
+# Local specific
+[local]
+ignore=mydoc,mysrc,sex,medias
+root_location=/home/taverne
+
+#─────────────────────────────────────────────────────────────────
+# Various sources
+#─────────────────────────────────────────────────────────────────
+[src]
+solarized=git://github.com/altercation/solarized.git
+auto-fu.zsh=git://github.com/hchbaw/auto-fu.zsh.git
+zsh-syntax-highlighting=git://github.com/zsh-users/zsh-syntax-highlighting.git
+symfttpd=git://github.com/laurentb/symfttpd.git
+symfony1=git://github.com/symfony/symfony1.git

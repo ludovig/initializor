@@ -15,13 +15,8 @@ usage () {
 # Retrieve directories hierarchy configuration
 #─────────────────────────────────────────────────────────────────
 parse_tree_config () {
-  # set variables from config file
-  local IFS=""
-  for line in \
-    $($readconfig $config)
-  do
-    eval $line
-  done
+	# read config command
+	. $script_location/read-config-safe names nodes local $*
 
   # aliases
   rootname=$root_name
@@ -38,7 +33,9 @@ parse_tree_config () {
 init_tree () {
   # parameters
   typeset -Ag treepaths      # directories paths
+  typeset -Ag treepathslabel # directories paths
   treepaths[$rootname]=$rootpath
+  treepathslabel[$rootlabel]=$rootpath
 
   # go !
   traverse_tree $rootlabel $rootpath
@@ -63,6 +60,7 @@ traverse_tree() {
         localname=${names[$label]:-$label}
         completepath=${localpath}/$localname
         treepaths[$localname]=$completepath
+        treepathslabel[$label]=$completepath
 
         # Continue to traverse tree
         traverse_tree $label $completepath
@@ -79,23 +77,29 @@ pushd "$(dirname ${0})"
 script_location=$(pwd)
 popd
 
-# read config command
-readconfig=($script_location/read-config names nodes local)
-
-# check config
-config=${*:#-*}
-if ! $readconfig $config > /dev/null; then
-  $readconfig  $config
-  usage
-fi
-
 # retrieve tree config
-parse_tree_config
+parse_tree_config $*
 
 # build directories tree
 init_tree
 
-for dirpath in ${(ov)treepaths}; do
-  print $dirpath
+quiet=false
+local opt;
+while getopts q opt; do
+  case $opt in
+    (q)
+      quiet=true
+      ;;
+    (\?)
+      print Bad option, aborting.
+      return 1
+      ;;
+  esac
 done
+
+if ! $quiet; then
+  for dirpath in ${(ov)treepaths}; do
+    print $dirpath
+  done
+fi
 # vim: set filetype=zsh:

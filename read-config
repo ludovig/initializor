@@ -9,7 +9,7 @@
 local defaultname="initialyzor.cfg"
 usage () {
   print "usage: read-config section config_file"
-  exit
+  exit 1
 }
 
 # some checks
@@ -19,8 +19,8 @@ if [[ ! -e $config ]]; then
   if [[ -e $defaultname ]]; then
     config=$defaultname
   else
-    if [[ -e ./$defaultname ]]; then
-      config=./$defaultname
+    if [[ -e ./.$defaultname ]]; then
+      config=./.$defaultname
     else
       print -- "no config file found" &&\
       exit 1

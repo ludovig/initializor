@@ -1,0 +1,46 @@
+#!/bin/zsh
+#─────────────────────────────────────────────────────────────────
+# Initialize a local directories hierarchy
+#
+# author:  Ludovic Vigouroux <ludo@mundoludo.fr>
+# created: October 2011
+#─────────────────────────────────────────────────────────────────
+make_bookmarks() {
+  local bookmarks
+  local outputs
+
+  # bookmark for every directories in treepath
+  for key in ${(k)treepaths}; do
+     cleanname=${key}
+     outputs=($outputs $cleanname=$treepaths[$key])
+     bookmarks=($bookmarks $cleanname)
+     # and for every directories inside those
+     for dir in ${treepaths[$key]}/(/)*; do
+     #               cleanname=${dir:t}
+     #               cleanname=${cleanname//[^a-zA-Z0-9]/_}
+     #               cleanname=${cleanname#[0-9]*[^0-9]}
+     #               cleanname=${cleanname##_}
+     #               outputs=($outputs $cleanname=\"$dir\")
+       echo $dir
+     done
+    done
+
+    for line in ${(o)outputs}; do
+      print -- "typeset -gx" $line
+      eval $line
+    done
+
+    echo : $bookmarks
+}
+
+# retrieve this file location
+pushd "$(dirname ${0})"
+script_location=$(pwd)
+popd
+
+# load directories path
+. $script_location/traverse-tree -q $*
+
+make_bookmarks
+
+# vim: set filetype=zsh:
