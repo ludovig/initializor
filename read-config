@@ -31,24 +31,23 @@ else
   last_section=$(($# - 1))
 fi
 
+# show section values
 for section in $*[1,$last_section]; do
 
   # check section
-  ! grep -qE '^\[ ?'$section $config &&\
-    print -- "section \"$section\" not found" &&\
-    exit 1
-
-  # retrieve array type of section
-  simple=$(awk '/^\[/ {p=0}; /^[a-zA-Z]*=.*,/ && p {print "true"; p=0} /^\[ ?'$section'/ {p=1};' $config)
-  # translate config
-  # simple array
-  if [[ -n $simple ]]; then
-    awk -F = '/^\[/ {p=0};/^[a-zA-Z]/ && p {gsub(","," "); print $1"=("$2")"}; /^\[ ?'$section'/ {p=1};' $config
-  # associative array
-  else
-    echo "typeset -Ag "$section
-    awk -F = '/^\[/ {p=0}; /^[a-zA-Z]/ && p {print "'$section'["$1"]="$2}; /^\[ ?'$section'/ {p=1};' $config
-  fi
+  if grep -qE '^\[ ?'$section' ?\]' $config; then
+  	# retrieve array type of section
+  	simple=$(awk '/^\[/ {p=0}; /^[a-zA-Z]*=.*,/ && p {print "true"; p=0} /^\[ ?'$section' ?\]/ {p=1};' $config)
+  	# translate config
+  	# simple array
+  	if [[ -n $simple ]]; then
+  	  awk -F = '/^\[/ {p=0};/^[a-zA-Z]/ && p {gsub(","," "); print $1"=("$2")"}; /^\[ ?'$section' ?\]/ {p=1};' $config
+  	# associative array
+  	else
+  	  echo "typeset -Ag "$section
+  	  awk -F = '/^\[/ {p=0}; /^[a-zA-Z]/ && p {print "'$section'["$1"]="$2}; /^\[ ?'$section' ?\]/ {p=1};' $config
+  	fi
+	fi
 
 done
 

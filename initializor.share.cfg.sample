@@ -41,6 +41,8 @@ p2p=emule,bittorrent
 [local]
 ignore=mydoc,mysrc,sex, p2p, web, mail, etc
 root_location=/home/taverne
+group_id=2000
+group_name=locaux
 
 #─────────────────────────────────────────────────────────────────
 # Various sources

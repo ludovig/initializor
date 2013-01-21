@@ -10,14 +10,22 @@
 # Clone sources
 #─────────────────────────────────────────────────────────────────
 retrieve_src() {
+	local destination
+	local dir
 
   for project in ${(ok)src}; do
     print -- $project
-    local dir=$src_path/$project
+		if [[ -n $src_destination && -n $src_destination[$project] ]]; then
+			destination=$treepathslabel[$src_destination[$project]]
+		else
+			destination=$src_path
+		fi
+    dir=$destination/$project
+		echo $dir
     if [[ -d $dir ]]; then
-      cd $dir && git pull
+      echo cd $dir && git pull
     else
-      git clone $src[$project] $dir
+      echo git clone $src[$project] $dir
     fi
   done
 }
@@ -28,10 +36,10 @@ script_location=$(pwd)
 popd
 
 # read config command
-. $script_location/read-config-safe src $*
+. $script_location/read-config-safe src src_destination $*
 
 # load directories path
-. $script_location/traverse-tree -q $* 
+. $script_location/traverse-tree -q $*
 
 local src_path=$treepathslabel[src]
 
