@@ -21,11 +21,10 @@ retrieve_src() {
 			destination=$src_path
 		fi
     dir=$destination/$project
-		echo $dir
     if [[ -d $dir ]]; then
-      echo cd $dir && git pull
+      cd $dir && git pull
     else
-      echo git clone $src[$project] $dir
+      git clone $src[$project] $dir
     fi
   done
 }
