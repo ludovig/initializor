@@ -39,7 +39,7 @@ p2p=emule,bittorrent
 
 # Local specific
 [local]
-ignore=mydoc,mysrc,sex,medias
+ignore=mydoc,mysrc,sex, p2p, web, mail, etc
 root_location=/home/taverne
 
 #─────────────────────────────────────────────────────────────────

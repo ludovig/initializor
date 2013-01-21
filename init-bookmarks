@@ -13,22 +13,27 @@ make_bookmarks() {
 
   # bookmark for every directories in treepath
   for key in ${(k)treepaths}; do
-     cleanname=$(echo $key | sed 's/\W//g' | sed 's/[0-9]//g')
-     outputs=($outputs $cleanname=$treepaths[$key])
-     bookmarks=($bookmarks $cleanname)
-     # and for every directories inside those
-     for dir in ${treepaths[$key]}/*(/); do
-       cleanname=$(echo ${dir:t} | sed 's/\W//g' | sed 's/[0-9]//g')
-       outputs=($outputs $cleanname=\"$dir\")
-       bookmarks=($bookmarks $cleanname)
-     done
+		set_path $key $treepaths[$key]
+    # and for every directories inside those
+    for dir in ${treepaths[$key]}/*(/); do
+			set_path ${dir:t} $dir
     done
+  done
 
-    for line in ${(o)outputs}; do
-      print -- "typeset -gx" $line
-    done
+  for line in ${(o)outputs}; do
+    print -- "typeset -gx" $line
+  done
 
-    echo : $bookmarks
+  echo : $bookmarks
+}
+
+set_path() {
+	path_name=$1
+	shift
+	path_location=$*
+	cleanname=$(echo $path_name | sed 's/\s//g' | sed 's/^[_0-9]*//g' |sed 's/[\.@-]//g')
+	outputs=($outputs $cleanname=\"$path_location\")
+	bookmarks=($bookmarks $cleanname)
 }
 
 # retrieve this file location

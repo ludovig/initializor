@@ -12,15 +12,11 @@
 make_directories() {
    for dirpath in ${(ov)treepaths}; do
        # create folder
-       if $write; then
-         if [[ ! -d $dirpath ]]; then
-           mkdir -pv $dirpath
-         fi
-         if [[ -n $perms ]]; then
-           chmod -v $perms $dirpath
-         fi
-       else
-         print -- $dirpath
+       if [[ ! -d $dirpath ]]; then
+         mkdir -pv $dirpath
+       fi
+       if [[ -n $perms ]]; then
+         chmod -v $perms $dirpath
        fi
    done
 }
@@ -32,20 +28,6 @@ make_directories() {
 pushd "$(dirname ${0})"
 script_location=$(pwd)
 popd
-
-write=false
-local opt;
-while getopts w opt; do
-  case $opt in
-    (w)
-      write=true
-      ;;
-    (\?)
-      print Bad option, aborting.
-      return 1
-      ;;
-  esac
-done
 
 # load directories path
 . $script_location/traverse-tree -q $*
