@@ -9,13 +9,13 @@
 pushd "$(dirname ${0})"
 script_location=$(pwd)
 popd
-bookmarks_location=$HOME/.zshbookmarks
+bookmarks_file=$HOME/.zshbookmarks
+paths_file=$HOME/.zshpaths
 default_config_user=$script_location/initializor.cfg
 default_config_share=$script_location/initializor.share.cfg
 home_config=$HOME/.initialyzor.cfg
 home_config_share=$HOME/.initialyzor.share.cfg
 
-# user installation
 config=$1
 if [[ -z $config ]] && [[ -f $default_config_user ]]; then
   config=$default_config_user
@@ -25,21 +25,6 @@ if [[ -z $config ]] && [[ -f $default_config_user ]]; then
     print -- "and edit those before running this command"
   fi
 fi
-
-# show arborescence
-$script_location/traverse-tree $config
-# create arborescence
-$script_location/init-dirs $config
-
-# save bookmarks
-rm $bookmarks_location && $script_location/init-bookmarks $config > $bookmarks_location
-
-# load sources
-$script_location/init-src $config
-
-# copy config files in user home
-[[ -f $home_config ]] && mv $home_config ${home_config}.bak
-cp $config $home_config
 
 # share installation
 config_share=$2
@@ -52,7 +37,7 @@ if [[ -n $config_share ]]; then
 
   # add user to share group
   if [[ -n $group_name ]] && ! groups | grep -q $group_name; then
-     sudo gpasswd -a $myname $group_name
+     sudo gpasswd -a $myname $group_name || exit 1
   fi
 
   # show arborescence
@@ -64,28 +49,46 @@ if [[ -n $config_share ]]; then
   . $script_location/traverse-tree -q $config_share
 	me=$(whoami)
 	if [[ -n $root_location ]] && ! stat -c '%U' $root_location | grep -q $me; then
-		sudo chown -v $me $root_location
+		sudo chown -v $me $root_location || exit 1
 	fi
   if [[ -n $treepaths ]]; then
     for dirpath in ${(ov)treepaths}; do
 			if stat -c '%U' $dirpath | grep -q $me; then
 				if ! stat -c '%G' $dirpath | grep -q $group_name; then
-      		sudo chgrp -v $group_name $dirpath
+      		sudo chgrp -v $group_name $dirpath || exit 1
 				fi
-      	sudo chmod -v 2770 $dirpath
+      	sudo chmod -v 2770 $dirpath || exit 1
 			fi
     done
   fi
 
   # save bookmarks
-  $script_location/init-bookmarks $config_share >> $bookmarks_location
+	rm -f $bookmarks_file && $script_location/init-bookmarks $config_share > $bookmarks_file
 
   # load sources
-  $script_location/init-src $config_share
+  $script_location/init-src $config_share || exit 1
 
   # copy config files in user home
   [[ -f $home_config_share ]] && mv $home_config_share ${home_config_share}.bak
   cp $config $home_config_share
 fi
 
+# user installation
+# show arborescence
+$script_location/traverse-tree $config || exit 1
+# create arborescence
+$script_location/init-dirs $config || exit 1
+
+# save bookmarks
+$script_location/init-bookmarks $config >> $bookmarks_file
+
+# copy config files in user home
+[[ -f $home_config ]] && mv $home_config ${home_config}.bak
+cp $config $home_config
+
+# load sources
+$script_location/init-src $config || exit 1
+
+# add initializor to path
+rm -f $paths_file && $script_location/export-path initializor $config > $paths_file
 # vim: set filetype=zsh:

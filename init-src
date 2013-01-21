@@ -40,7 +40,7 @@ popd
 # load directories path
 . $script_location/traverse-tree -q $*
 
-local src_path=$treepathslabel[src]
+src_path=$treepathslabel[src]
 
 retrieve_src
 

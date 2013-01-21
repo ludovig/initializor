@@ -1,0 +1,39 @@
+#!/bin/zsh
+#─────────────────────────────────────────────────────────────────
+# Add a source to path
+#
+# AUTHOR:  Ludovic Vigouroux <ludo@mundoludo.fr>
+# CREATED: January 2013
+#─────────────────────────────────────────────────────────────────
+
+export_path() {
+  if [[ -n $src_destination && -n $src_destination[$src_name] ]]; then
+    location=$treepathslabel[$src_destination[$src_name]]
+  else
+    location=$src_path
+  fi
+  dir=$location/$src_name
+  if [[ -d $dir ]]; then
+    print -- '[[ -n ${path[(r)'$dir']} ]] || path=('$dir' $path)'
+  fi
+}
+
+# retrieve this file location
+pushd "$(dirname ${0})"
+script_location=$(pwd)
+popd
+
+src_name=$1
+shift
+
+# read config command
+. $script_location/read-config-safe src src_destination $*
+
+# load directories path
+. $script_location/traverse-tree -q $*
+
+src_path=$treepathslabel[src]
+
+export_path
+
+# vim: set filetype=zsh:
