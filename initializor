@@ -89,6 +89,9 @@ cp $config $home_config
 # load sources
 $script_location/init-src $config || exit 1
 
+# add links
+$script_location/init-links $config || exit 1
+
 # add initializor to path
 rm -f $paths_file && $script_location/export-path initializor $config > $paths_file
 # vim: set filetype=zsh:

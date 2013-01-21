@@ -21,10 +21,13 @@ create_links() {
 		link=$links[$link]
 
 		# create link
-		if [[ -e $link && ! -L $link ]]; then
-			# merge previous existing file
-			mv $link ${link}.bak
-			vimdiff $file ${link}.bak
+		if [[ -d $file ]]; then
+			rm $link
+		else if [[ -e $link && ! -L $link ]]; then
+				# merge previous existing file
+				mv $link ${link}.bak
+				vimdiff $file ${link}.bak
+			fi
 		fi
 
 		# create new link
