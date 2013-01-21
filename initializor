@@ -62,10 +62,18 @@ if [[ -n $config_share ]]; then
 
   # set permissions
   . $script_location/traverse-tree -q $config_share
+	me=$(whoami)
+	if [[ -n $root_location ]] && ! stat -c '%U' $root_location | grep -q $me; then
+		sudo chown -v $me $root_location
+	fi
   if [[ -n $treepaths ]]; then
     for dirpath in ${(ov)treepaths}; do
-      sudo chown -v $(whoami):$group_name $dirpath
-      sudo chmod -v 2770 $dirpath
+			if stat -c '%U' $dirpath | grep -q $me; then
+				if ! stat -c '%G' $dirpath | grep -q $group_name; then
+      		sudo chgrp -v $group_name $dirpath
+				fi
+      	sudo chmod -v 2770 $dirpath
+			fi
     done
   fi
 
