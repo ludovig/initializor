@@ -35,7 +35,6 @@ create_links() {
 	done
 }
 
-
 # retrieve this file location
 pushd "$(dirname ${0})"
 script_location=$(pwd)
@@ -50,4 +49,5 @@ popd
 link_path=$treepathslabel[etc]
 
 create_links
+
 # vim: set filetype=zsh:

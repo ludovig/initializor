@@ -9,8 +9,7 @@
 pushd "$(dirname ${0})"
 script_location=$(pwd)
 popd
-bookmarks_file=$HOME/.zshbookmarks
-paths_file=$HOME/.zshpaths
+# read config command
 default_config_user=$script_location/initializor.cfg
 default_config_share=$script_location/initializor.share.cfg
 home_config=$HOME/.initialyzor.cfg
@@ -62,9 +61,6 @@ if [[ -n $config_share ]]; then
     done
   fi
 
-  # save bookmarks
-	rm -f $bookmarks_file && $script_location/init-bookmarks $config_share > $bookmarks_file
-
   # load sources
   $script_location/init-src $config_share || exit 1
 
@@ -79,9 +75,6 @@ $script_location/traverse-tree $config || exit 1
 # create arborescence
 $script_location/init-dirs $config || exit 1
 
-# save bookmarks
-$script_location/init-bookmarks $config >> $bookmarks_file
-
 # copy config files in user home
 [[ -f $home_config ]] && mv $home_config ${home_config}.bak
 cp $config $home_config
@@ -92,6 +85,7 @@ $script_location/init-src $config || exit 1
 # add links
 $script_location/init-links $config || exit 1
 
-# add initializor to path
-rm -f $paths_file && $script_location/export-path initializor $config > $paths_file
+# install externals
+$script_location/init-externals $config || exit 1
+
 # vim: set filetype=zsh:

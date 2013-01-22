@@ -15,12 +15,12 @@ usage () {
 # some checks
 [[ $# -eq 0 ]] && usage
 config=$*[$#]
-if [[ ! -e $config ]]; then
+if [[ ! -e $config ]] || [[ -x $config ]]; then
   if [[ -e $defaultname ]]; then
     config=$defaultname
   else
-    if [[ -e ./.$defaultname ]]; then
-      config=./.$defaultname
+    if [[ -e $HOME/.$defaultname ]]; then
+      config=$HOME/.$defaultname
     else
       print -- "no config file found" &&\
       exit 1
@@ -37,16 +37,23 @@ for section in $*[1,$last_section]; do
   # check section
   if grep -qE '^\[ ?'$section' ?\]' $config; then
   	# retrieve array type of section
-  	simple=$(awk '/^\[/ {p=0}; /^[a-zA-Z]*=.*,/ && p {print "true"; p=0} /^\[ ?'$section' ?\]/ {p=1};' $config)
-  	# translate config
-  	# simple array
-  	if [[ -n $simple ]]; then
-  	  awk -F = '/^\[/ {p=0};/^[a-zA-Z]/ && p {gsub(","," "); print $1"=("$2")"}; /^\[ ?'$section' ?\]/ {p=1};' $config
-  	# associative array
-  	else
-  	  echo "typeset -Ag "$section
-  	  awk -F = '/^\[/ {p=0}; /^[a-zA-Z]/ && p {print "'$section'["$1"]="$2}; /^\[ ?'$section' ?\]/ {p=1};' $config
-  	fi
+  	not_simple=$(awk '/^\[/ {p=0}; /=/ && p {print "true"; p=0} /^\[ ?'$section' ?\]/ {p=1};' $config)
+		# simple array
+		if [[ -z $not_simple ]]; then
+				print -- $section"=()"
+				awk -F = '/^\[/ {p=0};/^[a-zA-Z]/ && p {gsub(","," "); print "'$section'=($'$section' "$1")"}; /^\[ ?'$section' ?\]/ {p=1};' $config
+		else
+			array_list=$(awk '/^\[/ {p=0}; /^[a-zA-Z]*=.*,/ && p {print "true"; p=0} /^\[ ?'$section' ?\]/ {p=1};' $config)
+			# translate config
+			# list of arrays
+			if [[ -n $array_list ]]; then
+				awk -F = '/^\[/ {p=0};/^[a-zA-Z]/ && p {gsub(","," "); print $1"=("$2")"}; /^\[ ?'$section' ?\]/ {p=1};' $config
+			# associative array
+			else
+				print -- "typeset -Ag "$section
+				awk -F = '/^\[/ {p=0}; /^[a-zA-Z]/ && p {print "'$section'["$1"]="$2}; /^\[ ?'$section' ?\]/ {p=1};' $config
+			fi
+		fi
 	fi
 
 done

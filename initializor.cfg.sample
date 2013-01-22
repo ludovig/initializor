@@ -72,3 +72,12 @@ zsh/zshzle=$HOME/.zshzle
 [links_location]
 zsh=etc
 
+#─────────────────────────────────────────────────────────────────
+# Externals
+#─────────────────────────────────────────────────────────────────
+[install]
+initializor
+[paths_file]
+paths_file=$HOME/.zshpaths
+[initializor]
+bookmarks_file=$HOME/.zshbookmarks
