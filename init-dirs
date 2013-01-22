@@ -10,15 +10,15 @@
 # Create directories and show all directories
 #─────────────────────────────────────────────────────────────────
 make_directories() {
-   for dirpath in ${(ov)treepaths}; do
-       # create folder
-       if [[ ! -d $dirpath ]]; then
-         mkdir -pv $dirpath
-       fi
-       if [[ -n $perms ]]; then
-         chmod -v $perms $dirpath
-       fi
-   done
+	for dirpath in ${(ov)treepaths}; do
+		# create folder
+		if [[ ! -d $dirpath ]]; then
+			mkdir -pv $dirpath
+		fi
+		if [[ -n $perms ]]; then
+			chmod -v $perms $dirpath
+		fi
+	done
 }
 
 #─────────────────────────────────────────────────────────────────

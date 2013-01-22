@@ -64,9 +64,9 @@ if [[ -n $config_share ]]; then
   # load sources
   $script_location/init-src $config_share || exit 1
 
-  # copy config files in user home
+  # copy share config files in user home
   [[ -f $home_config_share ]] && mv $home_config_share ${home_config_share}.bak
-  cp $config $home_config_share
+  cp $config_share $home_config_share
 fi
 
 # user installation

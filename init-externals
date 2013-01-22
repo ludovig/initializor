@@ -20,7 +20,7 @@ plugins_location=$script_location"/install"
 # read config command
 . $script_location/read-config-safe install $*
 for src in $install; do
-  $plugins_location/$install $*
+	$plugins_location/$install $*
 done
 
 # vim: set filetype=zsh:

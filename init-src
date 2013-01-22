@@ -13,20 +13,20 @@ retrieve_src() {
 	local destination
 	local dir
 
-  for project in ${(ok)src}; do
-    print -- $project
+	for project in ${(ok)src}; do
+		print -- $project
 		if [[ -n $src_destination && -n $src_destination[$project] ]]; then
 			destination=$treepathslabel[$src_destination[$project]]
 		else
 			destination=$src_path
 		fi
-    dir=$destination/$project
-    if [[ -d $dir ]]; then
-      cd $dir && git pull
-    else
-      git clone $src[$project] $dir
-    fi
-  done
+		dir=$destination/$project
+		if [[ -d $dir ]]; then
+			cd $dir && git pull
+		else
+			git clone $src[$project] $dir
+		fi
+	done
 }
 
 # retrieve this file location

@@ -19,27 +19,29 @@ home_config_share=$HOME/.initialyzor.share.cfg
 # add initializor to path
 $script_location/export-path initializor $* >> $paths_file
 
+bookmarks_file=$initializor[bookmarks_file];
 # bookmarks
 if [[ -n $bookmarks_file ]]; then
-  rm -f $bookmarks_file
+	rm -f $bookmarks_file
 
-  # share
-  if [[ -f $home_config_share ]]; then
-    config_share=$default_config_share
-  else
-    if [[ -f $default_config_share ]]; then
-      config_share=$default_config_share
-    fi
-  fi
-  if [[ -n $config_share ]]; then
-    $script_location/init-bookmarks $config_share > $bookmarks_file
-  fi
+	# share
+	if [[ -f $home_config_share ]]; then
+		config_share=$home_config_share
+	else
+		if [[ -f $default_config_share ]]; then
+			config_share=$default_config_share
+		fi
+	fi
+	if [[ -n $config_share ]]; then
+		$script_location/init-bookmarks $config_share > $bookmarks_file
+	fi
 
-  # home
-  if [[ -f $bookmarks_file ]]; then
-    $script_location/init-bookmarks $* >> $bookmarks_file
-  else
-    $script_location/init-bookmarks $* > $bookmarks_file
-  fi
+	# home
+	if [[ -f $bookmarks_file ]]; then
+		$script_location/init-bookmarks $* >> $bookmarks_file
+	else
+		$script_location/init-bookmarks $* > $bookmarks_file
+	fi
 fi
+
 # vim: set filetype=zsh:

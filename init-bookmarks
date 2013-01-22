@@ -8,23 +8,23 @@
 setopt null_glob
 
 make_bookmarks() {
-  local bookmarks
-  local outputs
+	local bookmarks
+	local outputs
 
-  # bookmark for every directories in treepath
-  for key in ${(k)treepaths}; do
+	# bookmark for every directories in treepath
+	for key in ${(k)treepaths}; do
 		set_path $key $treepaths[$key]
-    # and for every directories inside those
-    for dir in ${treepaths[$key]}/*(/); do
+		# and for every directories inside those
+		for dir in ${treepaths[$key]}/*(/); do
 			set_path ${dir:t} $dir
-    done
-  done
+		done
+	done
 
-  for line in ${(o)outputs}; do
-    print -- "typeset -gx" $line
-  done
+	for line in ${(o)outputs}; do
+		print -- "typeset -gx" $line
+	done
 
-  echo : $bookmarks
+	echo : $bookmarks
 }
 
 set_path() {

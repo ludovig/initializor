@@ -24,15 +24,15 @@ create_links() {
 		if [[ -d $file ]]; then
 			rm $link
 		else if [[ -e $link && ! -L $link ]]; then
-				# merge previous existing file
-				mv $link ${link}.bak
-				vimdiff $file ${link}.bak
-			fi
+			# merge previous existing file
+			mv $link ${link}.bak
+			vimdiff $file ${link}.bak
 		fi
+	fi
 
-		# create new link
-		ln -sfv $file $link
-	done
+	# create new link
+	ln -sfv $file $link
+done
 }
 
 # retrieve this file location

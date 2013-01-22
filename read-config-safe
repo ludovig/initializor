@@ -7,17 +7,17 @@
 # created: 2013-01-20
 #─────────────────────────────────────────────────────────────────
 if [ -z $script_location ]; then
-  # retrieve this file location
-  pushd "$(dirname ${0})"
-  script_location=$(pwd)
-  popd
+	# retrieve this file location
+	pushd "$(dirname ${0})"
+	script_location=$(pwd)
+	popd
 fi
 
 args_withoutopts=(${*:#-*})
 
 readconfig_cmd=($script_location/read-config $args_withoutopts)
 if ! $readconfig_cmd > /dev/null; then
-  $readconfig_cmd
+	$readconfig_cmd
 	exit
 fi
 
@@ -25,9 +25,9 @@ fi
 defaultIFS=$IFS
 local IFS=""
 for line in \
-  $($readconfig_cmd)
+	$($readconfig_cmd)
 do
-  eval $line
+	eval $line
 done
 local IFS=$defaultIFS
 

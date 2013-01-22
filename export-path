@@ -7,15 +7,15 @@
 #─────────────────────────────────────────────────────────────────
 
 export_path() {
-  if [[ -n $src_destination && -n $src_destination[$src_name] ]]; then
-    location=$treepathslabel[$src_destination[$src_name]]
-  else
-    location=$src_path
-  fi
-  dir=$location/$src_name
-  if [[ -d $dir ]]; then
-    print -- '[[ -n ${path[(r)'$dir']} ]] || path=('$dir' $path)'
-  fi
+	if [[ -n $src_destination && -n $src_destination[$src_name] ]]; then
+		location=$treepathslabel[$src_destination[$src_name]]
+	else
+		location=$src_path
+	fi
+	dir=$location/$src_name
+	if [[ -d $dir ]]; then
+		print -- '[[ -n ${path[(r)'$dir']} ]] || path=('$dir' $path)'
+	fi
 }
 
 # retrieve this file location
