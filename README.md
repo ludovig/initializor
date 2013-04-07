@@ -61,16 +61,13 @@ Retrieve various projects from the internet
 ### read-config
 
 Show selected sections configurations values from intializor.cfg converted in zsh parameters.
-* [localpath]
-  *bookmarks_file location of local zsh bookmarks
-  *paths_file location of local zsh extended path
 
 ### reset-files
 
 Create local files with zsh bookmarks and extended path depending on current configuration. Also edit theses files with share bookmarks and path if a share config is specified with option -s or present in dotfiles.
-*[localpath]
-  *bookmarks_file location of local zsh bookmarks files
-  *paths_file location of local zsh extended path files
+* [localpath]
+  * bookmarks_file location of local zsh bookmarks files
+  * paths_file location of local zsh extended path files
 
 ### load-config
 
