@@ -31,8 +31,8 @@ write_path () {
 	if [[ 0 != ${localpath[(i)paths_file]} ]]; then
 		paths_file=$localpath[paths_file]
 		[[ true == $remove ]] && rm $paths_file && touch $paths_file
-		print -- "init-localpath >> $paths_file"
-		$script_location/init-localpath $config >> $paths_file || exit 1
+		print -- "init-path >> $paths_file"
+		$script_location/init-path $config >> $paths_file || exit 1
 	fi
 }
 
