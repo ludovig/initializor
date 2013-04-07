@@ -39,7 +39,7 @@ Use it to link config files from a repository to home directory.
 * [links] list of links
 * [links_location] Replace dirname of links by labeled path from traverse-tree
 
-### init-localpath
+### init-path
 
 Show zsh path extended with selected projects sources
 
