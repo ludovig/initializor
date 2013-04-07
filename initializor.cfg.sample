@@ -58,6 +58,9 @@ zsh/zshparam=$HOME/.zshparam
 zsh/zshprompt=$HOME/.zshprompt
 zsh/zshrc=$HOME/.zshrc
 zsh/zshzle=$HOME/.zshzle
+xorg/xinitrc=$HOME/.xinitrc
+xorg/xinitrc=$HOME/.xsessions
+xorg/Xresources=$HOME/.Xresources
 [links_location]
 zsh=etc
 
