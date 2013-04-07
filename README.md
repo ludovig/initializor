@@ -48,10 +48,10 @@ Create a share between users with directory hierarchy from traverse-tree. Create
 
 *See initializor.share.cfg.sample for an example of a share config*
 * [local]
-  * root_location share emplacement
-  * owner First owner of the share directories
-  * group_id group id of the share (only need if group doesn't exist)
-  * group_name group owner of the share
+  * root_location: share emplacement
+  * owner: First owner of the share directories
+  * group_id: group id of the share (only need if group doesn't exist)
+  * group_name: group owner of the share
 
 ### init-src
 Retrieve various projects from the internet
@@ -66,8 +66,8 @@ Show selected sections configurations values from intializor.cfg converted in zs
 
 Create local files with zsh bookmarks and extended path depending on current configuration. Also edit theses files with share bookmarks and path if a share config is specified with option -s or present in dotfiles.
 * [localpath]
-  * bookmarks_file location of local zsh bookmarks files
-  * paths_file location of local zsh extended path files
+  * bookmarks_file: location of local zsh bookmarks files
+  * paths_file: location of local zsh extended path files
 
 ### load-config
 
