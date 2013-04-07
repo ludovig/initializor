@@ -4,6 +4,7 @@
 #
 # author:  Ludovic Vigouroux <ludo@mundoludo.fr>
 # created: October 2011
+# Free to use, modify and redistribute.
 #─────────────────────────────────────────────────────────────────
 setopt null_glob
 

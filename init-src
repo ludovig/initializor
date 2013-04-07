@@ -2,8 +2,9 @@
 #─────────────────────────────────────────────────────────────────
 # Retrieve various sources
 #
-# AUTHOR:  Ludovic Vigouroux <ludo@mundoludo.fr>
-# CREATED: December 2011
+# author:  Ludovic Vigouroux <ludo@mundoludo.fr>
+# created: December 2011
+# Free to use, modify and redistribute.
 #─────────────────────────────────────────────────────────────────
 
 #─────────────────────────────────────────────────────────────────
@@ -35,7 +36,7 @@ script_location=$(pwd)
 popd
 
 # read config command
-. $script_location/read-config-safe src src_destination $*
+. $script_location/load-config src src_destination $*
 
 # load directories path
 . $script_location/traverse-tree -q $*

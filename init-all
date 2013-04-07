@@ -1,0 +1,100 @@
+#!/bin/zsh
+#─────────────────────────────────────────────────────────────────
+# Install a new user
+#
+# author:  Ludovic Vigouroux <ludo@mundoludo.fr>
+# created: January 2013
+# Free to use, modify and redistribute.
+#─────────────────────────────────────────────────────────────────
+
+pushd "$(dirname ${0})"
+script_location=$(pwd)
+popd
+
+local opt;
+while getopts s: opt; do
+	case $opt in
+		(s)
+			config_share=$OPTARG;
+			;;
+		(\?)
+			print Bad option, aborting.
+			return 1
+			;;
+	esac
+done
+
+if [[ -n $config_share ]]; then
+	shift
+	shift
+fi
+config=$1
+
+# read localpath config
+. $script_location/load-config localpath $config
+
+# user installation
+# show arborescence
+print -- "traverse-tree"
+$script_location/traverse-tree $config || exit 1
+
+# create arborescence
+print -- "init-dirs"
+$script_location/init-dirs $config || exit 1
+
+# add bookmarks to a local file
+#bookmarks_file=$localpath[bookmarks_file]
+#if [ -n $bookmarks_file ]; then
+#	print -- "init-bookmarks > $bookmarks_file"
+#	$script_location/init-bookmarks $config > $bookmarks_file || exit 1
+#fi
+#
+## add local executables paths to a local file
+#paths_file=$localpath[paths_file]
+#if [ -n $paths_file ]; then
+#	print -- "init-localpath > $paths_file"
+#	$script_location/init-localpath $config > $paths_file || exit 1
+#fi
+
+# add links
+print -- "init-links"
+$script_location/init-links $config || exit 1
+
+# load sources
+#$script_location/init-src $config || exit 1
+
+## share installation
+if [[ -n $config_share ]]; then
+	# show share arborescence
+	$script_location/traverse-tree $config_share || exit 1
+
+	# create share
+	sudo $script_location/init-share $config_share || exit 1
+
+	#  # load sources
+	#  $script_location/init-src $config_share || exit 1
+
+	# read share config localpath
+	localpath=${localpath[(i)]}
+	$localpath[bookmarks_file]=
+	. $script_location/load-config localpath $config_share
+	echo $localpath[bookmarks_file]
+	echo "plop"
+
+	# add share bookmarks to a local file
+	if [ -n $localpath[bookmarks_file] ]; then
+		bookmarks_file=$localpath[bookmarks_file]
+		print -- "init-bookmarks >> $bookmarks_file"
+		$script_location/init-bookmarks $config >> $bookmarks_file || exit 1
+	fi
+
+	# add local executables paths to a local file
+	if [ -n $localpath[paths_file] ]; then
+		paths_file=$localpath[paths_file]
+		print -- "init-localpath >> $paths_file"
+		$script_location/init-localpath $config >> $paths_file || exit 1
+	fi
+
+fi
+
+# vim: set filetype=zsh:

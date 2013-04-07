@@ -4,6 +4,7 @@
 #
 # created: 2011-05-30
 # author:  Ludovic Vigouroux <ludo@mundoludo.fr>
+# Free to use, modify and redistribute.
 #─────────────────────────────────────────────────────────────────
 
 usage () {
@@ -16,7 +17,7 @@ usage () {
 #─────────────────────────────────────────────────────────────────
 parse_tree_config () {
 	# read config command
-	. $script_location/read-config-safe names nodes local $*
+	. $script_location/load-config names nodes local $*
 
 	# aliases
 	rootname=$root_name

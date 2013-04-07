@@ -3,24 +3,25 @@
 #─────────────────────────────────────────────────────────────────
 # Directories names
 [names]
-bak=grenier
-bittorrent=torrents
-chess=794_echecs
-db=bases
+mysrc=atelier
 doc=bibliotheque
-emule=mule
+sex=boudoir
+mydoc=bureau
 sys=garage
-etc=confz
-games=jeux
+bak=grenier
+net=hall
 img=galerie
 medias=salon
-musics=musique
-mydoc=bureau
-mysrc=atelier
+chess=794_echecs
 photos=album
-net=hall
 videos=cinema
-sex=boudoir
+games=jeux
+musics=musique
+db=bases
+etc=confz
+bittorrent=torrents
+emule=mule
+src=sources
 
 # Tree
 [nodes]
@@ -29,10 +30,10 @@ root=bak,doc,sys,img,net,medias,mydoc,mysrc,sex
 light=etc,src
 
 # second level
-net=web,p2p,src,mail
+net=web,p2p,mail
 medias=musics,videos,games,photos
 doc=chess
-sys=etc
+sys=etc,src
 
 # third level
 p2p=emule,bittorrent
@@ -42,18 +43,6 @@ p2p=emule,bittorrent
 ignore=doc,src,db,musics,videos,games
 root_name=maison
 root_location=/home/ludo
-
-#─────────────────────────────────────────────────────────────────
-# Various sources
-#─────────────────────────────────────────────────────────────────
-[src]
-auto-fu.zsh=git://github.com/ludovig/auto-fu.zsh.git
-initializor=git://github.com/ludovig/initializor.git
-confz=git://github.com/ludovig/confz.git
-[src_destination]
-auto-fu.zsh=sys
-initializor=sys
-confz=sys
 
 #─────────────────────────────────────────────────────────────────
 # Links
@@ -73,11 +62,23 @@ zsh/zshzle=$HOME/.zshzle
 zsh=etc
 
 #─────────────────────────────────────────────────────────────────
-# Externals
+# Various sources
 #─────────────────────────────────────────────────────────────────
-[install]
+[src]
+auto-fu.zsh=git://github.com/ludovig/auto-fu.zsh.git
+initializor=git://github.com/ludovig/initializor.git
+confz=git://github.com/ludovig/confz.git
+[src_destination]
+auto-fu.zsh=sys
+initializor=sys
+confz=sys
+[src_bin]
 initializor
-[paths_file]
-paths_file=$HOME/.zshpaths
-[initializor]
+auto-fu.zsh
+
+#─────────────────────────────────────────────────────────────────
+# Location of some created local zsh files
+#─────────────────────────────────────────────────────────────────
+[localpath]
 bookmarks_file=$HOME/.zshbookmarks
+paths_file=$HOME/.zshpaths

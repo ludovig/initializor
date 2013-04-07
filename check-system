@@ -1,0 +1,39 @@
+#!/bin/sh
+#─────────────────────────────────────────────────────────────────
+# Use gnu commands on darwin system
+#
+# Author:  Ludovic Vigouroux <ludo@mundoludo.fr>
+# Created: 2012-03-11
+# Free to use, modify and redistribute.
+#─────────────────────────────────────────────────────────────────
+
+quiet=false
+while getopts q opt; do
+	case $opt in
+		(q)
+			quiet=true
+			;;
+		(\?)
+			print Bad option, aborting.
+			return 1
+			;;
+	esac
+done
+
+# What is my system?
+if [[ $OSTYPE == darwin* ]]; then
+	! $quiet && echo "Darwin"
+	# use gnu commands in cross-platform scripts
+	alias ln=gln
+	alias mkdir=gmkdir
+	alias chmod=gchmod
+	alias chown=gchown
+	alias chgrp=gchgrp
+	alias touch=gtouch
+	alias stat=gstat
+	alias sed=gsed
+else
+	! $quiet && echo "Linux"
+fi
+
+## vim: set filetype=zsh:

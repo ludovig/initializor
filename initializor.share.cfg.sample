@@ -40,9 +40,10 @@ p2p=emule,bittorrent
 # Local specific
 [local]
 ignore=mydoc,mysrc,sex, p2p, web, mail, etc
-root_location=/home/taverne
+root_location=/home/plop
 group_id=2000
 group_name=locaux
+owner=ludo
 
 #─────────────────────────────────────────────────────────────────
 # Various sources

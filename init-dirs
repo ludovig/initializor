@@ -4,6 +4,7 @@
 #
 # author:  Ludovic Vigouroux <ludo@mundoludo.fr>
 # created: October 2011
+# Free to use, modify and redistribute.
 #─────────────────────────────────────────────────────────────────
 
 #─────────────────────────────────────────────────────────────────
@@ -14,9 +15,15 @@ make_directories() {
 		# create folder
 		if [[ ! -d $dirpath ]]; then
 			mkdir -pv $dirpath
-		fi
-		if [[ -n $perms ]]; then
-			chmod -v $perms $dirpath
+			if [[ -n $perms ]]; then
+				chmod -v $perms $dirpath
+			fi
+			if [[ -n $owner ]]; then
+				chown -v $owner $dirpath
+			fi
+			if [[ -n $group_name ]]; then
+				chgrp -v $group_name $dirpath
+			fi
 		fi
 	done
 }

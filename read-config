@@ -4,9 +4,10 @@
 #
 # author:  Ludovic Vigouroux <ludo@mundoludo.fr>
 # created: 2013-01-13
+# Free to use, modify and redistribute.
 #─────────────────────────────────────────────────────────────────
 
-local defaultname="initialyzor.cfg"
+local defaultname="initializor.cfg"
 usage () {
 	print "usage: read-config section config_file"
 	exit 1

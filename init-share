@@ -6,14 +6,32 @@
 #
 # author:  Ludovic Vigouroux <ludo@mundoludo.fr>
 # created: December 2011
+# Free to use, modify and redistribute.
 #─────────────────────────────────────────────────────────────────
+
+usage () {
+	print "Please indicate a config_file"
+	exit 1
+}
 
 #─────────────────────────────────────────────────────────────────
 # Create group if needed
 #─────────────────────────────────────────────────────────────────
 create_group () {
 	if ! grep -q $group_name /etc/group; then
+		[[ -z $group_id ]] &&
+			print -- "Failed to retrieve group_id. Aborting" &&
+			exit 1
 		groupadd --gid $group_id $group_name
+	fi
+}
+
+#─────────────────────────────────────────────────────────────────
+# Add user to group if needed
+#─────────────────────────────────────────────────────────────────
+add_user () {
+	if ! groups $owner | grep -q $group_name; then
+		 gpasswd -a $owner $group_name || exit 1
 	fi
 }
 
@@ -28,6 +46,11 @@ create_share () {
 	fi
 }
 
+create_directories () {
+	perms=2770
+	. $script_location/init-dirs $config_share
+}
+
 #─────────────────────────────────────────────────────────────────
 # Install new share with values from config
 #─────────────────────────────────────────────────────────────────
@@ -38,22 +61,27 @@ install_share () {
 	[[ -z $share ]] &&
 		print -- "Failed to retrieve share location. Aborting" &&
 		exit 1
+	owner=$owner
+	[[ -z $owner ]] &&
+		print -- "Failed to retrieve owner of directories. Aborting" &&
+		exit 1
 	group_name=$group_name
 	[[ -z $group_name ]] &&
 		print -- "Failed to retrieve group_name. Aborting" &&
 		exit 1
 	groupid=$group_id
-	[[ -z $group_id ]] &&
-		print -- "Failed to retrieve group_id. Aborting" &&
-		exit 1
 
 	create_group
+	add_user
 	create_share
+	create_directories
 }
 
 #─────────────────────────────────────────────────────────────────
 # Main
 #─────────────────────────────────────────────────────────────────
+[[ $# -eq 0 ]] && usage
+config_share=$1
 
 # retrieve this file location
 pushd "$(dirname ${0})"
@@ -61,7 +89,9 @@ script_location=$(pwd)
 popd
 
 # read config
-. $script_location/read-config-safe local $*
+. $script_location/load-config local $*
+# load directories path
+. $script_location/traverse-tree -q $*
 
 # Create shared directory with group and permissions accordingly
 # to a config file

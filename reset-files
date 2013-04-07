@@ -14,7 +14,7 @@ default_config_share=$script_location/initializor.share.cfg
 home_config_share=$HOME/.initialyzor.share.cfg
 
 # read config command
-. $script_location/read-config-safe paths_file initializor $*
+. $script_location/load-config paths_file initializor $*
 
 # add initializor to path
 $script_location/export-path initializor $* >> $paths_file

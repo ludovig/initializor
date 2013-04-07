@@ -1,10 +1,11 @@
 #!/bin/zsh
 #─────────────────────────────────────────────────────────────────
 # Translate values in a config section in zsh parameters
-# Safe version, the one to source in other files
+# Safe version of read-config, the one to source
 #
 # author:  Ludovic Vigouroux <ludo@mundoludo.fr>
 # created: 2013-01-20
+# Free to use, modify and redistribute.
 #─────────────────────────────────────────────────────────────────
 if [ -z $script_location ]; then
 	# retrieve this file location
@@ -12,6 +13,8 @@ if [ -z $script_location ]; then
 	script_location=$(pwd)
 	popd
 fi
+# check system now
+$script_location/check-system -q
 
 args_withoutopts=(${*:#-*})
 

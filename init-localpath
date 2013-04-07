@@ -2,11 +2,32 @@
 #─────────────────────────────────────────────────────────────────
 # Add a source to path
 #
-# AUTHOR:  Ludovic Vigouroux <ludo@mundoludo.fr>
-# CREATED: January 2013
+# author:  Ludovic Vigouroux <ludo@mundoludo.fr>
+# created: January 2013
+# Free to use, modify and redistribute.
 #─────────────────────────────────────────────────────────────────
 
+# retrieve this file location
+pushd "$(dirname ${0})"
+script_location=$(pwd)
+popd
+
+# read config command
+. $script_location/load-config src src_destination src_bin $*
+
+# load directories path
+. $script_location/traverse-tree -q $*
+src_path=$treepathslabel[src]
+
+usage () {
+	print -- "src_bin config is missing"
+	exit 1
+}
+
 export_path() {
+
+	src_name=$1
+	[ -z $src_name ] && usage
 	if [[ -n $src_destination && -n $src_destination[$src_name] ]]; then
 		location=$treepathslabel[$src_destination[$src_name]]
 	else
@@ -18,22 +39,8 @@ export_path() {
 	fi
 }
 
-# retrieve this file location
-pushd "$(dirname ${0})"
-script_location=$(pwd)
-popd
-
-src_name=$1
-shift
-
-# read config command
-. $script_location/read-config-safe src src_destination $*
-
-# load directories path
-. $script_location/traverse-tree -q $*
-
-src_path=$treepathslabel[src]
-
-export_path
+for src_name in $src_bin; do
+	export_path $src_name
+done
 
 # vim: set filetype=zsh:

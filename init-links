@@ -2,8 +2,9 @@
 #─────────────────────────────────────────────────────────────────
 # Initialize links
 #
-# AUTHOR:  Ludovic Vigouroux <ludo@mundoludo.fr>
-# CREATED: December 2011
+# author:  Ludovic Vigouroux <ludo@mundoludo.fr>
+# created: December 2011
+# Free to use, modify and redistribute.
 #─────────────────────────────────────────────────────────────────
 
 create_links() {
@@ -41,7 +42,7 @@ script_location=$(pwd)
 popd
 
 # read config command
-. $script_location/read-config-safe links links_location $*
+. $script_location/load-config links links_location $*
 
 # load directories path
 . $script_location/traverse-tree -q $*
