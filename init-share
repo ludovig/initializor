@@ -31,7 +31,7 @@ create_group () {
 #─────────────────────────────────────────────────────────────────
 add_user () {
 	if ! groups $owner | grep -q $group_name; then
-		 gpasswd -a $owner $group_name || exit 1
+		gpasswd -a $owner $group_name || exit 1
 	fi
 }
 

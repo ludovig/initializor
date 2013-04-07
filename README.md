@@ -1,27 +1,33 @@
 initializor
 ===========
 
-Post-installation and further maintenance of a system with zsh.
+Great tools in zsh to setup a fine user environment.
+Bookmarks, home directories arborescence, management of internet sources projects, share initialisation, and simple dotfiles installation.
 
 Installation
 ------------
 
-Copy initializor.cfg.sample into ./initializor.cfg and edit it according to your needs. Various tools are described below with theirs configurations explanations.
+Copy initializor.cfg.sample into ~/.initializor.cfg and edit it according to your needs. If you need a share, you can also copy initializor.share.cfg.sample into ~/.initializor.share.cfg. Various tools are described below with theirs configurations explanations.
 When you're satisfied, you can run
-  zsh initializor
+
+  zsh init-all
+
 to complete first install.
 
 Usage
 -----
 ### check-system
 
-Use gnu commands also when on darwin system
+Use gnu commands also when on darwin system.
 
 ### init-all
 
+Init home arborescence, dotfiles links, download various projects sources, and add local files with zsh bookmarks and paths accordingly to local configuration.
+If share configuration is specified with -s option, or present in dotfiles, create a new share and do all the above also inside of it.
+
 ### init-bookmarks
 
-Show zsh bookmarks that could be guessed from traverse-tree arborescence
+Show zsh bookmarks that could be guessed from traverse-tree arborescence.
 
 ### init-dirs
 
@@ -39,7 +45,8 @@ Show zsh path extended with selected projects sources
 
 ### init-share
 Create a share between users with directory hierarchy from traverse-tree. Create group if needed.
-__See initializor.share.cfg.sample for an example of a share config__
+
+*See initializor.share.cfg.sample for an example of a share config*
 * [local]
   * root_location share emplacement
   * owner First owner of the share directories
@@ -54,6 +61,13 @@ Retrieve various projects from the internet
 ### read-config
 
 Show selected sections configurations values from intializor.cfg converted in zsh parameters.
+* [localpath]
+  *bookmarks_file location of local zsh bookmarks
+  *paths_file location of local zsh extended path
+
+### reset-files
+
+Create local files with zsh bookmarks and extended path depending on current configuration. Also edit theses files with share bookmarks and path if a share config is specified with option -s or present in dotfiles.
 
 ### load-config
 

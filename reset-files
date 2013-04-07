@@ -2,46 +2,95 @@
 #─────────────────────────────────────────────────────────────────
 # Install externals sources
 #
-# AUTHOR:  Ludovic Vigouroux <ludo@mundoludo.fr>
-# CREATED: January 2013
+# author:  Ludovic Vigouroux <ludo@mundoludo.fr>
+# created: January 2013
+# Free to use, modify and redistribute.
+#─────────────────────────────────────────────────────────────────
+local default_sharename="initializor.share.cfg"
+
+#─────────────────────────────────────────────────────────────────
+# Add bookmarks to a local file
+#─────────────────────────────────────────────────────────────────
+write_bookmarks () {
+	local config=$1
+	local remove=$2
+	if [[ 0 != ${localpath[(i)bookmarks_file]} ]]; then
+		bookmarks_file=$localpath[bookmarks_file]
+		[[ true == $remove ]] && rm $bookmarks_file && touch $bookmarks_file
+		print -- "init-bookmarks >> $bookmarks_file"
+		$script_location/init-bookmarks $config >> $bookmarks_file || exit 1
+	fi
+}
+
+#─────────────────────────────────────────────────────────────────
+# Add local executables paths to a local file
+#─────────────────────────────────────────────────────────────────
+write_path () {
+	local config=$1
+	local remove=$2
+	if [[ 0 != ${localpath[(i)paths_file]} ]]; then
+		paths_file=$localpath[paths_file]
+		[[ true == $remove ]] && rm $paths_file && touch $paths_file
+		print -- "init-localpath >> $paths_file"
+		$script_location/init-localpath $config >> $paths_file || exit 1
+	fi
+}
+
+#─────────────────────────────────────────────────────────────────
+# Main
 #─────────────────────────────────────────────────────────────────
 
 # retrieve this file location
-pushd "$(dirname ${0})/.."
+pushd "$(dirname ${0})"
 script_location=$(pwd)
 popd
-default_config_share=$script_location/initializor.share.cfg
-home_config_share=$HOME/.initialyzor.share.cfg
 
-# read config command
-. $script_location/load-config paths_file initializor $*
+local opt;
+while getopts s: opt; do
+	case $opt in
+		(s)
+			config_share=$OPTARG;
+			;;
+		(\?)
+			print Bad option, aborting.
+			return 1
+			;;
+	esac
+done
 
-# add initializor to path
-$script_location/export-path initializor $* >> $paths_file
-
-bookmarks_file=$initializor[bookmarks_file];
-# bookmarks
-if [[ -n $bookmarks_file ]]; then
-	rm -f $bookmarks_file
-
-	# share
-	if [[ -f $home_config_share ]]; then
-		config_share=$home_config_share
+if [[ -n $config_share ]]; then
+	shift
+	shift
+else
+	if [[ -e $default_sharename ]]; then
+		config_share=$default_sharename
 	else
-		if [[ -f $default_config_share ]]; then
-			config_share=$default_config_share
+		if [[ -e $HOME/.$default_sharename ]]; then
+			config_share=$HOME/.$default_sharename
 		fi
 	fi
-	if [[ -n $config_share ]]; then
-		$script_location/init-bookmarks $config_share > $bookmarks_file
-	fi
-
-	# home
-	if [[ -f $bookmarks_file ]]; then
-		$script_location/init-bookmarks $* >> $bookmarks_file
-	else
-		$script_location/init-bookmarks $* > $bookmarks_file
-	fi
 fi
+config=$1
+
+## share installation
+if [[ -n $config_share ]]; then
+	# read share config localpath
+	. $script_location/load-config localpath $config_share
+	print "reset-files share"
+	write_bookmarks $config_share true
+	write_path $config_share true
+fi
+print "reset-files"
+old_bookmarks_file=$bookmarks_file
+old_paths_file=$paths_file
+localpath=${localpath[(i)]}
+
+# user installation
+# read localpath config
+. $script_location/load-config localpath $config
+[[ 0 != ${localpath[(i)bookmarks_file]} && $localpath[bookmarks_file] != $old_bookmarks_file ]] && remove_bookmark=true
+[[ 0 != ${localpath[(i)paths_file]} && $localpath[paths_file] != $old_paths_file ]] && remove_path=true
+write_bookmarks $config $remove_bookmark
+write_path $config $remove_path
 
 # vim: set filetype=zsh:
