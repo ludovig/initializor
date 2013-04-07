@@ -58,6 +58,10 @@ Retrieve various projects from the internet
 * [src] url of the projet
 * [src_destination] local path of the project guessed on labeled path from traverse-tree (optional, default to src label from traverse-tree)
 
+### load-config
+
+Load zsh parameters in current environment from read-config output.
+
 ### read-config
 
 Show selected sections configurations values from intializor.cfg converted in zsh parameters.
@@ -68,10 +72,6 @@ Create local files with zsh bookmarks and extended path depending on current con
 * [localpath]
   * bookmarks_file: location of local zsh bookmarks files
   * paths_file: location of local zsh extended path files
-
-### load-config
-
-Load zsh parameters in current environment from read-config output.
 
 ### traverse-tree
 
