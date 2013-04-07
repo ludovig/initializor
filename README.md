@@ -9,9 +9,7 @@ Installation
 
 Copy initializor.cfg.sample into ~/.initializor.cfg and edit it according to your needs. If you need a share, you can also copy initializor.share.cfg.sample into ~/.initializor.share.cfg. Various tools are described below with theirs configurations explanations.
 When you're satisfied, you can run
-
-  zsh init-all
-
+    zsh init-all
 to complete first install.
 
 Usage
