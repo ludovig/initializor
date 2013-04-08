@@ -50,7 +50,6 @@ root_location=/home/ludo
 [links]
 # xorg
 xorg/xinitrc=$HOME/.xinitrc
-xorg/xsession=$HOME/.xsession
 xorg/Xresources=$HOME/.Xresources
 # zsh
 zsh/zshalias=$HOME/.zshalias
@@ -78,7 +77,6 @@ initializor=sys
 confz=sys
 [src_bin]
 initializor
-auto-fu.zsh
 
 #─────────────────────────────────────────────────────────────────
 # Location of some created local zsh files
