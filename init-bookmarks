@@ -33,8 +33,10 @@ set_path() {
 	shift
 	path_location=$*
 	cleanname=$(echo $path_name | sed 's/\s//g' | sed 's/^[_0-9]*//g' |sed 's/[\.@-]//g')
-	outputs=($outputs $cleanname=\"$path_location\")
-	bookmarks=($bookmarks $cleanname)
+	if [[ ${#cleanname[@]} -gt 0 ]]; then
+		outputs=($outputs $cleanname=\"$path_location\")
+		bookmarks=($bookmarks $cleanname)
+	fi
 }
 
 # retrieve this file location

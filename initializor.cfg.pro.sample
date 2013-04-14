@@ -1,0 +1,86 @@
+#─────────────────────────────────────────────────────────────────
+# Directories hierarchy
+#─────────────────────────────────────────────────────────────────
+# Directories names
+[names]
+mysrc=atelier
+doc=bibliotheque
+sex=boudoir
+mydoc=bureau
+sys=garage
+bak=grenier
+net=hall
+img=galerie
+medias=salon
+chess=794_echecs
+photos=album
+videos=cinema
+games=jeux
+musics=musique
+db=bases
+etc=confz
+bittorrent=torrents
+emule=mule
+src=sources
+
+# Tree
+[nodes]
+# first level
+root=bak,doc,sys,img,net,medias,mydoc,mysrc,sex
+light=etc,src
+
+# second level
+net=web,p2p,mail
+medias=musics,videos,games,photos
+doc=chess
+sys=etc,src
+
+# third level
+p2p=emule,bittorrent
+
+# Local specific
+[local]
+ignore=doc,src,db,musics,videos,games,medias,p2p,sex,mail
+root_name=maison
+root_location=/home/lvigouroux
+
+#─────────────────────────────────────────────────────────────────
+# Links
+#─────────────────────────────────────────────────────────────────
+[links]
+# xorg
+xorg/xinitrc=$HOME/.xinitrc
+xorg/Xresources=$HOME/.Xresources
+# zsh
+zsh/zshalias=$HOME/.zshalias
+zsh/zshenv=$HOME/.zshenv
+zsh/zshcompsys=$HOME/.zshcompsys
+zsh/functions=$HOME/.zshfunctions
+zsh/zshoptions=$HOME/.zshoptions
+zsh/zshparam=$HOME/.zshparam
+zsh/zshprompt=$HOME/.zshprompt
+zsh/zshrc=$HOME/.zshrc
+zsh/zshzle=$HOME/.zshzle
+[links_location]
+zsh=etc
+
+#─────────────────────────────────────────────────────────────────
+# Various sources
+#─────────────────────────────────────────────────────────────────
+[src]
+auto-fu.zsh=git://github.com/ludovig/auto-fu.zsh.git
+initializor=git://github.com/ludovig/initializor.git
+confz=git://github.com/ludovig/confz.git
+[src_destination]
+auto-fu.zsh=sys
+initializor=sys
+confz=sys
+[src_bin]
+initializor
+
+#─────────────────────────────────────────────────────────────────
+# Location of some created local zsh files
+#─────────────────────────────────────────────────────────────────
+[localpath]
+bookmarks_file=$HOME/.zshbookmarks
+paths_file=$HOME/.zshpaths
