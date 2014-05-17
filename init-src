@@ -6,6 +6,7 @@
 # created: December 2011
 # Free to use, modify and redistribute.
 #─────────────────────────────────────────────────────────────────
+setopt null_glob
 
 #─────────────────────────────────────────────────────────────────
 # Clone sources
@@ -23,7 +24,12 @@ retrieve_src() {
 		fi
 		dir=$destination/$project
 		if [[ -d $dir ]]; then
-			cd $dir && git pull
+			files=($dir/*)
+			if [[ ${#files[@]} -gt 0 ]]; then
+				cd $dir && git pull
+			else
+				rmdir $dir && git clone $src[$project] $dir
+			fi
 		else
 			git clone $src[$project] $dir
 		fi
