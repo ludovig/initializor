@@ -61,6 +61,16 @@ zsh/zshparam=$HOME/.zshparam
 zsh/zshprompt=$HOME/.zshprompt
 zsh/zshrc=$HOME/.zshrc
 zsh/zshzle=$HOME/.zshzle
+# vim
+vim/vimrc=$HOME/.vimrc
+vim/vim=$HOME/.vim
+vim/gvimrc=$HOME/.gvimrc
+# vimboard
+vimboard/xkb=$HOME/.xkb
+# awesome
+awesome/rc.lua=$HOME/.config/awesome/rc.lua
+# xplanet
+xplanet=$HOME/.xplanet
 [links_location]
 zsh=etc
 
@@ -70,6 +80,7 @@ zsh=etc
 [src]
 auto-fu.zsh=git://github.com/ludovig/auto-fu.zsh.git
 initializor=git://github.com/ludovig/initializor.git
+vimboard=git://github.com/ludovig/vimboard.git
 confz=git://github.com/ludovig/confz.git
 [src_destination]
 auto-fu.zsh=sys
