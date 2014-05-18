@@ -50,6 +50,7 @@ root_location=/home/ludo
 [links]
 # xorg
 xorg/xinitrc=$HOME/.xinitrc
+xorg/xinitrc=$HOME/.xprofile
 xorg/Xresources=$HOME/.Xresources
 # zsh
 zsh/zshalias=$HOME/.zshalias
@@ -72,7 +73,7 @@ awesome/rc.lua=$HOME/.config/awesome/rc.lua
 # xplanet
 xplanet=$HOME/.xplanet
 [links_location]
-zsh=etc
+vimboard=sys
 
 #─────────────────────────────────────────────────────────────────
 # Various sources
@@ -86,6 +87,7 @@ confz=git://github.com/ludovig/confz.git
 auto-fu.zsh=sys
 initializor=sys
 confz=sys
+vimboard=sys
 [src_bin]
 initializor
 
