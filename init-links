@@ -23,7 +23,7 @@ create_links() {
 		link=$links[$link]
 
 		# create link
-		if [[ -d $file ]]; then
+		if [[ -h $file ]]; then
 			rm $link
 		else if [[ -e $link && ! -L $link ]]; then
 			# merge previous existing file
