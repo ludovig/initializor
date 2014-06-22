@@ -27,11 +27,33 @@ create_group () {
 }
 
 #─────────────────────────────────────────────────────────────────
+# Create group if needed (on a mac)
+#─────────────────────────────────────────────────────────────────
+create_group_darwin () {
+	if dscl . list /groups | grep -q $group_name ; then
+		print -- "share group: $fg[blue]${group_name}$fg[default]"
+	else
+		print -- "Creating share group\
+			$fg[blue]${group_name}$fg[default]"
+		dscl . create /groups/$group_name gid $group_id
+	fi
+}
+
+#─────────────────────────────────────────────────────────────────
 # Add user to group if needed
 #─────────────────────────────────────────────────────────────────
 add_user () {
 	if ! groups $owner | grep -q $group_name; then
 		gpasswd -a $owner $group_name || exit 1
+	fi
+}
+
+#─────────────────────────────────────────────────────────────────
+# Add user to group if needed (on a mac)
+#─────────────────────────────────────────────────────────────────
+add_user_darwin () {
+	if ! groups $owner | grep -q $group_name; then
+		dseditgroup -o edit -a $owner -t user $group_name
 	fi
 }
 
@@ -70,9 +92,13 @@ install_share () {
 		print -- "Failed to retrieve group_name. Aborting" &&
 		exit 1
 	groupid=$group_id
-
-	create_group
-	add_user
+  if [[ $OSTYPE == darwin* ]]; then
+	  create_group_darwin
+	  add_user_darwin
+	else
+	  create_group
+	  add_user
+	fi
 	create_share
 	create_directories
 }
