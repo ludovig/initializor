@@ -79,10 +79,10 @@ vimboard=sys
 # Various sources
 #─────────────────────────────────────────────────────────────────
 [src]
-auto-fu.zsh=git://github.com/ludovig/auto-fu.zsh.git
-initializor=git://github.com/ludovig/initializor.git
-vimboard=git://github.com/ludovig/vimboard.git
-confz=git://github.com/ludovig/confz.git
+auto-fu.zsh=https://github.com/ludovig/auto-fu.zsh.git
+initializor=https://github.com/ludovig/initializor.git
+vimboard=https://github.com/ludovig/vimboard.git
+confz=https://github.com/ludovig/confz.git
 [src_destination]
 auto-fu.zsh=sys
 initializor=sys
