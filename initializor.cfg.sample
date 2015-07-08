@@ -48,42 +48,46 @@ root_location=/home/ludo
 # Links
 #─────────────────────────────────────────────────────────────────
 [links]
+# awesome
+awesome/rc.lua=$HOME/.config/awesome/rc.lua
+# gnu-linux
+gnu-linux/dircolors=$HOME/.dircolors
+# vimboard
+vimboard/xkb=$HOME/.xkb
+# vim
+vim/gvimrc=$HOME/.gvimrc
+vim/vim=$HOME/.vim
+vim/vimrc=$HOME/.vimrc
 # xorg
 xorg/xinitrc=$HOME/.xinitrc
-xorg/xinitrc=$HOME/.xprofile
+home/.xinitrc=$HOME/.xprofile
 xorg/Xresources=$HOME/.Xresources
+# xplanet
+xplanet=$HOME/.xplanet
 # zsh
+zsh/functions=$HOME/.zshfunctions
 zsh/zlogin=$HOME/.zlogin
 zsh/zshalias=$HOME/.zshalias
-zsh/zshenv=$HOME/.zshenv
 zsh/zshcompsys=$HOME/.zshcompsys
-zsh/functions=$HOME/.zshfunctions
+zsh/zshenv=$HOME/.zshenv
 zsh/zshoptions=$HOME/.zshoptions
 zsh/zshparam=$HOME/.zshparam
 zsh/zshprompt=$HOME/.zshprompt
 zsh/zshrc=$HOME/.zshrc
 zsh/zshzle=$HOME/.zshzle
-# vim
-vim/vimrc=$HOME/.vimrc
-vim/vim=$HOME/.vim
-vim/gvimrc=$HOME/.gvimrc
-# vimboard
-vimboard/xkb=$HOME/.xkb
-# awesome
-awesome/rc.lua=$HOME/.config/awesome/rc.lua
-# xplanet
-xplanet=$HOME/.xplanet
+
 [links_location]
 vimboard=sys
+home=root
 
 #─────────────────────────────────────────────────────────────────
 # Various sources
 #─────────────────────────────────────────────────────────────────
 [src]
 auto-fu.zsh=https://github.com/ludovig/auto-fu.zsh.git
-initializor=https://github.com/ludovig/initializor.git
-vimboard=https://github.com/ludovig/vimboard.git
-confz=https://github.com/ludovig/confz.git
+initializor=git@github.com:ludovig/initializor.git
+vimboard=git@github.com:ludovig/vimboard.git
+confz=git@github.com:ludovig/confz.git
 [src_destination]
 auto-fu.zsh=sys
 initializor=sys
