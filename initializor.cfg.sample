@@ -53,6 +53,7 @@ xorg/xinitrc=$HOME/.xinitrc
 xorg/xinitrc=$HOME/.xprofile
 xorg/Xresources=$HOME/.Xresources
 # zsh
+zsh/zlogin=$HOME/.zlogin
 zsh/zshalias=$HOME/.zshalias
 zsh/zshenv=$HOME/.zshenv
 zsh/zshcompsys=$HOME/.zshcompsys
