@@ -78,7 +78,6 @@ zsh/zshzle=$HOME/.zshzle
 
 [links_location]
 vimboard=sys
-home=root
 
 #─────────────────────────────────────────────────────────────────
 # Various sources
