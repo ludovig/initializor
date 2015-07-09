@@ -32,7 +32,7 @@ create_links() {
 	fi
 
 	# create new link
-	ln -sfv $file $link
+	ln -sfnv $file $link
 done
 }
 
