@@ -55,6 +55,12 @@ auto-fu.zsh=git://github.com/hchbaw/auto-fu.zsh.git
 zsh-syntax-highlighting=git://github.com/zsh-users/zsh-syntax-highlighting.git
 symfttpd=git://github.com/laurentb/symfttpd.git
 symfony1=git://github.com/symfony/symfony1.git
+vundle=git://github.com/gmarik/Vundle.vim.git
+
+[links]
+vundle=$HOME/.vim/bundle/vundle
+[links_location]
+vundle=src
 
 #─────────────────────────────────────────────────────────────────
 # Location of some created local zsh files

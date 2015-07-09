@@ -13,8 +13,9 @@ create_links() {
 
 	for link in ${(ok)links}; do
 		# retrieve file
-		if [[ -n $links_location && -n $links_location[$link] ]]; then
-			location=$treepathslabel[$link_location[$link]]
+		link_name=${link/\/*/}
+		if [[ -n $links_location && -n $links_location[$link_name] ]]; then
+			location=$treepathslabel[$links_location[$link_name]]
 		else
 			location=$link_path
 		fi
@@ -22,7 +23,7 @@ create_links() {
 		link=$links[$link]
 
 		# create link
-		if [[ -d $file ]]; then
+		if [[ -h $file ]]; then
 			rm $link
 		else if [[ -e $link && ! -L $link ]]; then
 			# merge previous existing file
@@ -32,6 +33,8 @@ create_links() {
 	fi
 
 	# create new link
+	dirname=$(dirname $link)
+	[[ ! -d $dirname ]] && mkdir -pv $dirname
 	ln -sfnv $file $link
 done
 }
