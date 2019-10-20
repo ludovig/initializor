@@ -1,48 +1,37 @@
 #─────────────────────────────────────────────────────────────────
 # Directories hierarchy
 #─────────────────────────────────────────────────────────────────
+# Local specific
+[local]
+root_label=light
+#root_location=/home/ludo
+#ignore=doc,src,db,musics,videos,games
+#root_name=maison
+
 # Directories names
 [names]
-mysrc=atelier
-doc=bibliotheque
-sex=boudoir
-mydoc=bureau
+workshop=atelier
+doc=bureau
+img=galerie
 sys=garage
 bak=grenier
 net=hall
-img=galerie
 medias=salon
-chess=794_echecs
 photos=album
-videos=cinema
-games=jeux
-musics=musique
-db=bases
-etc=confz
-bittorrent=torrents
-emule=mule
 src=sources
+etc=confz
+p2p=p2p
 
 # Tree
 [nodes]
 # first level
-root=bak,doc,sys,img,net,medias,mydoc,mysrc,sex
-light=etc,src
+root=workshop,doc,img,sys,bak,net,medias
+light=workshop,doc,sys
 
 # second level
-net=web,p2p,mail
-medias=musics,videos,games,photos
-doc=chess
+net=p2p
+medias=photos
 sys=etc,src
-
-# third level
-p2p=emule,bittorrent
-
-# Local specific
-[local]
-ignore=doc,src,db,musics,videos,games
-root_name=maison
-root_location=/home/ludo
 
 #─────────────────────────────────────────────────────────────────
 # Links
@@ -75,6 +64,8 @@ zsh/zshparam=$HOME/.zshparam
 zsh/zshprompt=$HOME/.zshprompt
 zsh/zshrc=$HOME/.zshrc
 zsh/zshzle=$HOME/.zshzle
+#git
+git/gitconfig=$HOME/.gitconfig
 
 [links_location]
 vimboard=sys
@@ -84,9 +75,8 @@ vimboard=sys
 #─────────────────────────────────────────────────────────────────
 [src]
 auto-fu.zsh=https://github.com/ludovig/auto-fu.zsh.git
-initializor=git@github.com:ludovig/initializor.git
-vimboard=git@github.com:ludovig/vimboard.git
-confz=git@github.com:ludovig/confz.git
+vimboard=https://github.com/ludovig/vimboard.git
+confz=https://github.com/ludovig/confz.git
 [src_destination]
 auto-fu.zsh=sys
 initializor=sys

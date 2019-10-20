@@ -18,12 +18,12 @@ usage () {
 parse_tree_config () {
 	# read config command
 	. $script_location/load-config names nodes local $*
-
 	# aliases
-	rootname=$root_name
-	rootpath=$root_location
-	rootlabel=$root_label
+	rootname=${local[root_name]}
+	rootpath=${local[root_location]}
+	rootlabel=${local[root_label]}
 	# default values
+	[[ -z $rootpath ]] && rootpath=$HOME
 	[[ -z $rootname ]] && rootname=${rootpath:t}
 	[[ -z $rootlabel ]] && rootlabel=root
 }

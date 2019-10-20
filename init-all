@@ -6,6 +6,7 @@
 # created: January 2013
 # Free to use, modify and redistribute.
 #─────────────────────────────────────────────────────────────────
+local default_config="initializor.cfg.sample"
 local default_sharename="initializor.share.cfg"
 
 pushd "$(dirname ${0})"
@@ -38,6 +39,7 @@ else
 	fi
 fi
 config=$1
+[[ -z $config ]] && config=$default_config
 
 # read localpath config
 . $script_location/load-config localpath $config
@@ -80,6 +82,14 @@ fi
 
 # Save local bookmarks and path
 [[ -n $config_share ]] && config_share=('-s' $config_share)
-$script_location/reset-files $config_share $config || exit 1
+#$script_location/reset-files $config_share $config || exit 1
 
+#move initializor at the end if needed
+if [[ -d $HOME/initializor ]]; then
+	. $script_location/traverse-tree -q $config
+
+	src_path=$treepathslabel[sys]
+	mv $HOME/initializor $src_path
+fi
+exit
 # vim: set filetype=zsh:
