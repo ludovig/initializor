@@ -66,9 +66,11 @@ zsh/zshrc=$HOME/.zshrc
 zsh/zshzle=$HOME/.zshzle
 #git
 git/gitconfig=$HOME/.gitconfig
-
+#vim
+vundle=$HOME/.vim/bundle/vundle
 [links_location]
 vimboard=sys
+vundle=src
 
 #─────────────────────────────────────────────────────────────────
 # Various sources
@@ -77,6 +79,7 @@ vimboard=sys
 auto-fu.zsh=https://github.com/ludovig/auto-fu.zsh.git
 vimboard=https://github.com/ludovig/vimboard.git
 confz=https://github.com/ludovig/confz.git
+vundle=https://github.com/VundleVim/Vundle.vim.git
 [src_destination]
 auto-fu.zsh=sys
 initializor=sys
