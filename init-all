@@ -6,8 +6,7 @@
 # created: January 2013
 # Free to use, modify and redistribute.
 #─────────────────────────────────────────────────────────────────
-local default_config="initializor.cfg.sample"
-local default_sharename="initializor.share.cfg"
+local default_config="initializor.cfg.sample.ini"
 
 pushd "$(dirname ${0})"
 script_location=$(pwd)
@@ -16,9 +15,6 @@ popd
 local opt;
 while getopts s: opt; do
 	case $opt in
-		(s)
-			config_share=$OPTARG;
-			;;
 		(\?)
 			print Bad option, aborting.
 			return 1

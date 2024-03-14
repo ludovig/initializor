@@ -1,13 +1,13 @@
 #!/bin/zsh
 #─────────────────────────────────────────────────────────────────
-# Translate values in a config section in zsh parameters
+# Translate values in an ini section in zsh parameters
 #
 # author:  Ludovic Vigouroux <ludo@mundoludo.fr>
 # created: 2013-01-13
 # Free to use, modify and redistribute.
 #─────────────────────────────────────────────────────────────────
 
-local defaultname="initializor.cfg"
+local defaultname="initializor.cfg.sample.ini"
 usage () {
 	print "usage: read-config section config_file"
 	exit 1
@@ -34,25 +34,16 @@ fi
 
 # show section values
 for section in $*[1,$last_section]; do
-
 	# check section
 	if grep -qE '^\[ ?'$section' ?\]' $config; then
-		# retrieve array type of section
-		not_simple=$(awk '/^\[/ {p=0}; /=/ && p {print "true"; p=0} /^\[ ?'$section' ?\]/ {p=1};' $config)
-		# simple array
-		if [[ -z $not_simple ]]; then
-			print -- $section"=()"
-			awk -F = '/^\[/ {p=0};/^[a-zA-Z]/ && p {gsub(","," "); print "'$section'=($'$section' "$1")"}; /^\[ ?'$section' ?\]/ {p=1};' $config
+		array_list=$(awk '/^\[/ {p=0}; /^[a-zA-Z]*=.*,/ && p {print "true"; p=0} /^\[ ?'$section' ?\]/ {p=1};' $config)
+		# list of arrays
+		if [[ -n $array_list ]]; then
+			awk -F = '/^\[/ {p=0};/^[a-zA-Z]/ && p {gsub(","," "); print $1"=("$2")"}; /^\[ ?'$section' ?\]/ {p=1};' $config
+		# associative array
 		else
-			array_list=$(awk '/^\[/ {p=0}; /^[a-zA-Z]*=.*,/ && p {print "true"; p=0} /^\[ ?'$section' ?\]/ {p=1};' $config)
-			# list of arrays
-			if [[ -n $array_list ]]; then
-				awk -F = '/^\[/ {p=0};/^[a-zA-Z]/ && p {gsub(","," "); print $1"=("$2")"}; /^\[ ?'$section' ?\]/ {p=1};' $config
-			# associative array
-			else
-				print -- "typeset -Ag "$section
-				awk -F = '/^\[/ {p=0}; /^[a-zA-Z]/ && p {print "'$section'["$1"]="$2}; /^\[ ?'$section' ?\]/ {p=1};' $config
-			fi
+			print -- "typeset -Ag "$section
+			awk -F = '/^\[/ {p=0}; /^[a-zA-Z]/ && p {print "'$section'["$1"]="$2}; /^\[ ?'$section' ?\]/ {p=1};' $config
 		fi
 	fi
 
