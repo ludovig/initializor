@@ -71,9 +71,7 @@ traverse_tree() {
 # Load directories hierarchy
 #─────────────────────────────────────────────────────────────────
 # retrieve this file location
-pushd "$(dirname ${0})"
-script_location=$(pwd)
-popd
+script_location=${0:A:h}
 
 # retrieve tree config
 parse_tree_config $*
