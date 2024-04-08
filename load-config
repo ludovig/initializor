@@ -7,12 +7,7 @@
 # created: 2013-01-20
 # Free to use, modify and redistribute.
 #─────────────────────────────────────────────────────────────────
-if [ -z $script_location ]; then
-	# retrieve this file location
-	pushd "$(dirname ${0})"
-	script_location=$(pwd)
-	popd
-fi
+: ${script_location:=${0:A:h}}
 # check system now
 $script_location/check-system -q
 

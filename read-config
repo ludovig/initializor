@@ -7,7 +7,7 @@
 # Free to use, modify and redistribute.
 #─────────────────────────────────────────────────────────────────
 
-local defaultname="initializor.cfg.sample.ini"
+local defaultname="initializor.sample.ini"
 usage () {
 	print "usage: read-config section config_file"
 	exit 1
