@@ -46,15 +46,8 @@ read_config() {
   for section in $*; do
 	  # check section
 	  if grep -qE '^\[ ?'$section' ?\]' $config; then
-		  array_list=$(awk '/^\[/ {p=0}; /^[a-zA-Z]*=.*,/ && p {print "true"; p=0} /^\[ ?'$section' ?\]/ {p=1};' $config)
-		  # list of arrays
-		  if [[ -n $array_list ]]; then
-			  awk -F = '/^\[/ {p=0};/^[a-zA-Z]/ && p {gsub(","," "); print $1"=("$2")"}; /^\[ ?'$section' ?\]/ {p=1};' $config
-		  # associative array
-		  else
-			  print -- "typeset -Ag "$section
-			  awk -F = '/^\[/ {p=0}; /^[a-zA-Z]/ && p {print "'$section'["$1"]="$2}; /^\[ ?'$section' ?\]/ {p=1};' $config
-		  fi
+		  print -- "typeset -Ag "$section
+		  awk -F = '/^\[/ {p=0}; /^[a-zA-Z]/ && p {print "'$section'["$1"]="$2}; /^\[ ?'$section' ?\]/ {p=1};' $config
 	  fi
   done
 }

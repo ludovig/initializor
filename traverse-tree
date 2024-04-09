@@ -8,7 +8,7 @@
 #─────────────────────────────────────────────────────────────────
 
 usage () {
-	print "usage: traverse-tree [-q] config_file"
+	print "usage: $ZSH_ARGZERO [-q] config_file"
 	exit 1
 }
 
@@ -19,13 +19,9 @@ parse_tree_config () {
 	# read config command
 	. $script_location/load-config names nodes tree $*
 	# aliases
-	rootname=${tree[root_name]}
-	rootpath=${tree[root_location]}
-	treelabel=${tree[root_label]}
-	# default values
-	[[ -z $rootpath ]] && rootpath=$HOME
-	[[ -z $rootname ]] && rootname=${rootpath:t}
-	[[ -z $treelabel ]] && treelabel=full
+	rootname=${tree[root_name]:-${rootpath:t}}
+	rootpath=${tree[root_location]:-$HOME}
+	treelabel=${tree[root_label]:-full}
 }
 
 #─────────────────────────────────────────────────────────────────
@@ -35,6 +31,7 @@ init_tree () {
 	# parameters
 	typeset -Ag treepaths      # directories paths
 	typeset -Ag treepathslabel # directories paths without converted names
+
 	treepaths[$rootname]=$rootpath
 	treepathslabel[$treelabel]=$rootpath
 
@@ -53,8 +50,11 @@ traverse_tree() {
 	typeset localpath=$2
 
 	# level is not a leaf and contain an array with childrens labels
-	if [[ -n ${(P)level} && "array" == ${$(typeset +m $level)[1]} ]] ; then
-		for label in ${(P)level}; do
+	if [[ -v nodes[$level] ]]; then
+		# generate labels array for level node
+		labels=(${(s:,:)nodes[$level]})
+
+		for label in $labels; do
 			# Record path of the tree
 			localname=${names[$label]:-$label}
 			completepath=${localpath}/$localname
