@@ -1,32 +1,71 @@
 #!/bin/zsh
 #─────────────────────────────────────────────────────────────────
-# Translate values in a config section in zsh parameters
-# Safe version of read-config, the one to source
+# Translate values in ini sections in zsh parameters
 #
 # author:  Ludovic Vigouroux <ludo@mundoludo.fr>
 # created: 2013-01-20
 # Free to use, modify and redistribute.
 #─────────────────────────────────────────────────────────────────
+usage () {
+	print "usage: $ZSH_ARGZERO [-p] sections [config]"
+	exit 1
+}
+[[ $# -eq 0 ]] && usage
 : ${script_location:=${0:A:h}}
-# check system now
 $script_location/check-system -q
 
-args_withoutopts=(${*:#-*})
+print_config=false
+while getopts p opt; do
+  case $opt in
+	(p) print_config=true;;
+	(?) print Bad option, aborting. && exit 1;;
+  esac
+done
+shift $(( OPTIND - 1 ))
 
-readconfig_cmd=($script_location/read-config $args_withoutopts)
-if ! $readconfig_cmd > /dev/null; then
-	$readconfig_cmd
-	exit
+# retrieve config to use
+sample_config=$script_location/initializor.sample.ini
+default_config=$HOME/.initializor.ini
+
+config=$*[$#]
+if [[ ! -e $config ]]; then
+	if [[ -e $default_config ]]; then
+		config=$default_config
+	elif [[ -e $sample_config ]]; then
+		config=$sample_config
+	else
+		print -- "no config file found, aborting" &&\
+		exit 1
+	fi
+else
+  shift -p
 fi
 
-# set variables from config file
-defaultIFS=$IFS
-local IFS=""
-for line in \
-	$($readconfig_cmd)
-do
-	eval $line
-done
-local IFS=$defaultIFS
+read_config() {
+  # show section values
+  for section in $*; do
+	  # check section
+	  if grep -qE '^\[ ?'$section' ?\]' $config; then
+		  array_list=$(awk '/^\[/ {p=0}; /^[a-zA-Z]*=.*,/ && p {print "true"; p=0} /^\[ ?'$section' ?\]/ {p=1};' $config)
+		  # list of arrays
+		  if [[ -n $array_list ]]; then
+			  awk -F = '/^\[/ {p=0};/^[a-zA-Z]/ && p {gsub(","," "); print $1"=("$2")"}; /^\[ ?'$section' ?\]/ {p=1};' $config
+		  # associative array
+		  else
+			  print -- "typeset -Ag "$section
+			  awk -F = '/^\[/ {p=0}; /^[a-zA-Z]/ && p {print "'$section'["$1"]="$2}; /^\[ ?'$section' ?\]/ {p=1};' $config
+		  fi
+	  fi
+  done
+}
+
+result_read=$(read_config $*)
+if $print_config; then
+  echo $result_read;
+else
+  for line in ${(f)result_read}; do
+	eval $line;
+  done
+fi
 
 # vim: set filetype=zsh:

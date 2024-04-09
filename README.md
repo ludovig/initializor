@@ -60,11 +60,7 @@ Retrieve various projects from the internet
 
 ### load-config
 
-Load zsh parameters in current environment from read-config output.
-
-### read-config
-
-Show selected sections configurations values from intializor.cfg converted in zsh parameters.
+Load, or show, converted zsh parameters from selected sections configurations values from any ini config.
 
 ### reset-files
 
