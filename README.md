@@ -43,16 +43,6 @@ Use it to link config files from a repository to home directory.
 
 Show zsh path extended with selected projects sources
 
-### init-share
-Create a share between users with directory hierarchy from traverse-tree. Create group if needed.
-
-*See initializor.share.cfg.sample for an example of a share config*
-* [local]
-  * root_location: share emplacement
-  * owner: First owner of the share directories
-  * group_id: group id of the share (only need if group doesn't exist)
-  * group_name: group owner of the share
-
 ### init-src
 Retrieve various projects from the internet
 * [src] url of the projet

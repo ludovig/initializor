@@ -6,78 +6,29 @@
 # created: January 2013
 # Free to use, modify and redistribute.
 #─────────────────────────────────────────────────────────────────
-local default_config="initializor.cfg.sample.ini"
-
-pushd "$(dirname ${0})"
-script_location=$(pwd)
-popd
-
-local opt;
-while getopts s: opt; do
-	case $opt in
-		(\?)
-			print Bad option, aborting.
-			return 1
-			;;
-	esac
-done
-
-if [[ -n $config_share ]]; then
-	shift
-	shift
-else
-	if [[ -e $default_sharename ]]; then
-		config_share=$default_sharename
-	else
-		if [[ -e $HOME/.$default_sharename ]]; then
-			config_share=$HOME/.$default_sharename
-		fi
-	fi
-fi
-config=$1
-[[ -z $config ]] && config=$default_config
+: ${script_location:=${0:A:h}}
 
 # read localpath config
-. $script_location/load-config localpath $config
+. $script_location/load-config localpath
 
 # user installation
 # show arborescence
 print -- "traverse-tree"
-$script_location/traverse-tree $config || exit 1
+$script_location/traverse-tree || exit 1
 
 # create arborescence
 print -- "init-dirs"
-$script_location/init-dirs $config || exit 1
+$script_location/init-dirs || exit 1
 
 # load sources
 print -- "init-src"
-$script_location/init-src $config || exit 1
+$script_location/init-src || exit 1
 
 # add links
 print -- "init-links"
-$script_location/init-links $config || exit 1
-
-## share installation
-if [[ -n $config_share ]]; then
-	# show share arborescence
-	print -- "traverse-tree share"
-	$script_location/traverse-tree $config_share || exit 1
-
-	# create share
-	echo "init-share"
-	sudo $script_location/init-share $config_share || exit 1
-
-	# load sources
-	print -- "init-src share"
-	$script_location/init-src $config_share || exit 1
-
-	# add links
-	print -- "init-links share"
-	$script_location/init-links $config_share || exit 1
-fi
+$script_location/init-links || exit 1
 
 # Save local bookmarks and path
-[[ -n $config_share ]] && config_share=('-s' $config_share)
 #$script_location/reset-files $config_share $config || exit 1
 
 #move initializor at the end if needed
