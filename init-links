@@ -22,27 +22,34 @@ create_links() {
 		file=$location/$link
 		link=$links[$link]
 
+		if [[ ! -e $file ]]; then
+				echo $file does not exists, aborting >&2
+				exit 1
+		fi
+
 		# create link
-		if [[ -h $file ]]; then
-			rm $link
-		else if [[ -e $link && ! -L $link ]]; then
+		if [[ -h $link ]]; then
+			if [[ ${link:A} == $file ]]; then
+				continue
+			else
+				echo $link "->" ${link:A} is different from $file, aborting >&2
+				exit 1
+			fi
+		elif [[ -e $link && ! -L $link ]]; then
 			# merge previous existing file
 			mv $link ${link}.bak
 			vimdiff $file ${link}.bak
 		fi
-	fi
 
-	# create new link
-	dirname=$(dirname $link)
-	[[ ! -d $dirname ]] && mkdir -pv $dirname
-	ln -sfnv $file $link
-done
+		# create new link
+		dirname=$(dirname $link)
+		[[ ! -d $dirname ]] && mkdir -pv $dirname
+		ln -sfnv $file $link
+	done
 }
 
 # retrieve this file location
-pushd "$(dirname ${0})"
-script_location=$(pwd)
-popd
+: ${script_location:=${0:A:h}}
 
 # read config command
 . $script_location/load-config links links_location $*
