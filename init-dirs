@@ -15,15 +15,6 @@ make_directories() {
 		# create folder
 		if [[ ! -d $dirpath ]]; then
 			mkdir -pv $dirpath
-			if [[ -n $perms ]]; then
-				chmod -v $perms $dirpath
-			fi
-			if [[ -n $owner ]]; then
-				chown -v $owner $dirpath
-			fi
-			if [[ -n $group_name ]]; then
-				chgrp -v $group_name $dirpath
-			fi
 		fi
 	done
 }
@@ -32,9 +23,7 @@ make_directories() {
 # Main
 #─────────────────────────────────────────────────────────────────
 # retrieve this file location
-pushd "$(dirname ${0})"
-script_location=$(pwd)
-popd
+: ${script_location:=${0:A:h}}
 
 # load directories path
 . $script_location/traverse-tree -q $*
