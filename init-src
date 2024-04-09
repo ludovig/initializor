@@ -23,6 +23,7 @@ retrieve_src() {
 			destination=$src_path
 		fi
 		dir=$destination/$project
+		echo location: $dir
 		if [[ -d $dir ]]; then
 			files=($dir/*)
 			if [[ ${#files[@]} -gt 0 ]]; then
@@ -37,9 +38,7 @@ retrieve_src() {
 }
 
 # retrieve this file location
-pushd "$(dirname ${0})"
-script_location=$(pwd)
-popd
+script_location=${0:A:h}
 
 # read config command
 . $script_location/load-config src src_destination $*
