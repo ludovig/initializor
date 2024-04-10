@@ -22,12 +22,11 @@ create_links() {
 		file=$location/$link
 		link=$links[$link]
 
+		# various checks
 		if [[ ! -e $file ]]; then
-				echo $file does not exists, aborting >&2
+				echo $file to link does not exists, aborting >&2
 				exit 1
 		fi
-
-		# create link
 		if [[ -h $link ]]; then
 			if [[ ${link:A} == $file ]]; then
 				continue
@@ -35,15 +34,13 @@ create_links() {
 				echo $link "->" ${link:A} is different from $file, aborting >&2
 				exit 1
 			fi
-		elif [[ -e $link && ! -L $link ]]; then
-			# merge previous existing file
-			mv $link ${link}.bak
-			vimdiff $file ${link}.bak
+		elif [[ -e $link ]]; then
+			echo $link exists and is not a link, aborting >&2
+			exit 1
 		fi
 
 		# create new link
-		dirname=$(dirname $link)
-		[[ ! -d $dirname ]] && mkdir -pv $dirname
+		[[ ! -d ${link:h} ]] && mkdir -pv ${link:h}
 		ln -sfnv $file $link
 	done
 }
